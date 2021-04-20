@@ -1,9 +1,15 @@
 <template>
-    <h1>This is Sign up</h1>
+    <Navbar />
 </template>
 
 <script>
-
+import Navbar from '../components/Navbar'
+export default {
+    name: 'Signin',
+    components: {
+        Navbar
+    },
+}
 </script>
 
 <style scoped>

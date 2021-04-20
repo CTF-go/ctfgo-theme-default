@@ -29,20 +29,22 @@
       </vs-navbar>
 </template>
 <script>
+
 export default {
+    name: 'Navbar',
     props: {
-        username: String
+        username:String,
     },
     data:() => ({
-        active: 'Navbar',
-        username: this.username,
+        active: 'Navbar'
     }),
+    
     methods: {
         routerTo(target){
-            if(target=='signin'){
+            if(target=='signin' && this.$router.history.current.path!=='/signin'){
                 this.$router.push('/signin')
             }
-            else if(target=='signup'){
+            else if(target=='signup' && this.$router.history.current.path!=='/signup'){
                 this.$router.push('/signup')
             }
         }

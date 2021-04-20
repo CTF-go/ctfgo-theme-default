@@ -1,6 +1,6 @@
 <template>
     <div class="homepage">
-        <Navbar v-bind:username=username />
+        <Navbar v-bind:username='username' />
     </div>
     
 </template>
