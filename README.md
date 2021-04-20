@@ -1,19 +1,25 @@
-# ctfgo-theme-default
+# CTFgo-Theme-Default
 
-## Project setup
+## Frontend of CTFgo
+
+It is the default theme of CTFgo, whitch is written in vue.
+
+## Tech stack
+
+vue2, vue-router, webpack, scss, vuesax
+
+## Usage
+
+### For Developer
+
 ```
+git clone https://github.com/CTF-go/ctfgo-theme-default.git
+
+cd ctfgo-theme-default
+
 yarn install
+
+npm run serve
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Thanks for use!
