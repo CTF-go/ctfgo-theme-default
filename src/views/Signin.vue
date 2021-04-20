@@ -6,7 +6,19 @@
                 <h1>Sign in to CTFgo</h1>
             </div>
             <div class="auth-box">
-                
+                <vs-input v-model="authForm.username" label-placeholder="Username or email address">
+                </vs-input>
+                <vs-input v-model="authForm.password" label-placeholder="Password" type="password">
+                </vs-input>
+                <div class="flex">
+                    <vs-checkbox v-model="remember">Remember me</vs-checkbox>
+                    <vs-button @click="routerTo('forgotpassword')" transparent :active="active == 0">Forgot Password?</vs-button>
+                </div>
+                <div class="auth-box-footer">
+                    <vs-button block>Sign In</vs-button>
+
+                    <vs-button @click="routerTo('signup')" size="small" transparent :active="active == 0">New Here? Create New Account</vs-button>
+                </div>
             </div>
         </div>
     </div>
@@ -22,68 +34,77 @@ export default {
     },
     data:() => ({
         authForm: {
-            username: 'Leon',
-            password: '123456'
+            username: '',
+            password: ''
         },
-        value: '',
+        remember:'',
         hasVisiblePassword: false
 
     }),
-    computed: {
-        getProgress() {
-          let progress = 0
-
-          // at least one number
-
-          if (/\d/.test(this.value)) {
-            progress += 20
-          }
-
-          // at least one capital letter
-
-          if (/(.*[A-Z].*)/.test(this.value)) {
-            progress += 20
-          }
-
-          // at menons a lowercase
-
-          if (/(.*[a-z].*)/.test(this.value)) {
-            progress += 20
-          }
-
-          // more than 5 digits
-
-          if (this.value.length >= 6) {
-            progress += 20
-          }
-
-          // at least one special character
-
-          if (/[^A-Za-z0-9]/.test(this.value)) {
-            progress += 20
-          }
-
-          return progress
+      methods: {
+          routerTo(target){
+            if(target=='forgotpassword' && this.$router.history.current.path!=='/forgotpassword'){
+                this.$router.push('/forgotpassword')
+            }
+            else if(target=='signup' && this.$router.history.current.path!=='/signup'){
+                this.$router.push('/signup')
+            }
+            else if(target=='home' && this.$router.history.current.path!=='/'){
+                this.$router.push('/')
+            }
         }
       }
+
     }
 </script>
 
 
-<style scoped>
+<style lang="scss">
+.flex{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    a{
+        font-size: .8rem;
+        opacity: .7;
+    };
+    .vs-checkbox-label{
+        font-size: .8rem;
+    }
+}
+.auth-box-footer{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    width:100%;
+    .vs-button{
+        margin: 5px;
+    }
+}
+.auth-box .vs-input{
+    margin-top: 6px;
+}
+.vs-input-content{
+    margin: 10px;
+}
+.vs-input-content label{
+    font-size: 2px;
+    color: #8c8c8c;
+}
+.vs-input-content input{
+    width: 100%;
+}
 .auth-container{
     background-color:#FAFAFA;
     height: 100%;
     width: 100%;
 }
 .auth-form{
-    width: 640px;
+    width: 400px;
     max-width: 90%;
-    height: 550px;
     max-height: 90%;
     margin: 0 auto;
-    border: 1px solid;
-    border-color: #d51a1a;
 
     position: absolute;
     left:50%;
@@ -97,9 +118,6 @@ export default {
     text-shadow: none;
     padding: 6px;
     background-color: initial;
-
-    border: 1px solid;
-    border-color: #1d1717;
 }
 .auth-box-header h1 {
     font-size: 24px;
@@ -107,14 +125,11 @@ export default {
     letter-spacing: -.5px;
 }
 .auth-box{
-    background-color: initial;
+    background-color: #FFFFFF;
     width: 100% auto;
     max-width: 100%;
-
-    padding: 6px;
-
-    border-radius:3px;
-    border: 1px solid;
-    border-color: #1d1717;
+    padding: 12px;
+    border-radius:5px;
+    box-shadow:#8c8c8c;
 }
 </style>

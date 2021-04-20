@@ -3,7 +3,7 @@
         <template #left>
             <img src="../assets/logos/navbar-logo.png" alt="">
         </template>
-        <vs-navbar-item :active="active == 'guide'" id="guide">
+        <vs-navbar-item @click="routerTo('home')" :active="active == 'guide'" id="guide">
             Home
         </vs-navbar-item>
         <vs-navbar-item :active="active == 'docs'" id="docs">
@@ -46,6 +46,9 @@ export default {
             }
             else if(target=='signup' && this.$router.history.current.path!=='/signup'){
                 this.$router.push('/signup')
+            }
+            else if(target=='home' && this.$router.history.current.path!=='/'){
+                this.$router.push('/')
             }
         }
     }
