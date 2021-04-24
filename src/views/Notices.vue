@@ -1,0 +1,10 @@
+<template>
+    <div>
+        <h1>Notices</h1>
+        <h1>Notices</h1>
+        <h1>Notices</h1>
+        <h1>Notices</h1>
+        <h1>Notices</h1>
+        <h1>Notices</h1>
+    </div>
+</template>

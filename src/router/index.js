@@ -1,23 +1,23 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Index from '../views/Index.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    redirect: '/home',
+    name: 'Index',
+    component: Index,
     children: [
       {
         path: 'home',
-        redirect: '/',
-        component: Home
+        component: () => import('../views/Home.vue')
       },
       {
-        path: 'notifications',
-        component: () => import('../views/Notifications.vue')
+        path: 'notices',
+        component: () => import('../views/Notices.vue')
       },
       {
         path: 'users',
@@ -30,8 +30,7 @@ const routes = [
       {
         path: 'challenges',
         component: () => import('../views/Challenges.vue')
-      },
-
+      }
     ]
   }
 ]

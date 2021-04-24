@@ -5,5 +5,6 @@
         <h1>ScoreBoard</h1>
         <h1>ScoreBoard</h1>
         <h1>ScoreBoard</h1>
+        <h1>ScoreBoard</h1>
     </div>
 </template>

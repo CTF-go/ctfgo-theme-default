@@ -142,8 +142,8 @@ export default {
         pushRouter(adress){
             if(adress=='Home'){
                 this.$router.push('/home')
-            }else if(adress=='Notifications'){
-                this.$router.push('/notifications')
+            }else if(adress=='Notices'){
+                this.$router.push('/notices')
             }else if(adress=='Users'){
                 this.$router.push('/users')
             }else if(adress=='ScoreBoard'){
@@ -155,10 +155,12 @@ export default {
         async signin(){
           const {data: result} = await this.$http.post('/login', this.signinForm.submit)
             if (result.code == 200){
-              console.log('登录成功')
+              console.log('Success')
+              this.openNotification('🥳 Success!', 'Hi, '+result.username+'. Welcome to CTFgo~')
               this.username = result.username
+              this.signinForm.active = false
             }else{
-              console.log('登录失败')
+              this.openNotification('👎 Login failed!', 'Plese check your <strong>username</strong> or <strong>password</strong>.')
             };
         },
         async signup(){
@@ -169,6 +171,13 @@ export default {
               console.log('注册失败')
           };
         },
+        openNotification(title, text) {
+          const noti = this.$vs.notification({
+            position: 'top-center',
+            title,
+            text
+          })
+        }
     }
 }
 </script>
