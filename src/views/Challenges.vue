@@ -1,0 +1,10 @@
+<template>
+    <div>
+        <h1>Challenges</h1>
+        <h1>Challenges</h1>
+        <h1>Challenges</h1>
+        <h1>Challenges</h1>
+        <h1>Challenges</h1>
+        <h1>Challenges</h1>
+    </div>
+</template>

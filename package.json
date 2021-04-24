@@ -7,9 +7,11 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
+    "core-js": "^3.11.0",
+    "material-icons": "^0.2.3",
     "vue": "^2.6.11",
-    "vue-router": "^3.2.0"
+    "vue-router": "^3.2.0",
+    "vuesax": "^4.0.1-alpha.25"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -17,6 +19,7 @@
     "@vue/cli-service": "~4.5.0",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
+    "vue-cli-plugin-vuesax": "^1.0.0",
     "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [
