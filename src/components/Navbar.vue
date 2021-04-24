@@ -7,6 +7,9 @@
         <vs-navbar-item @click="pushRouter('Home')" :active="active == 'Home'" id="Home">
           Home
         </vs-navbar-item>
+        <vs-navbar-item @click="pushRouter('Notices')" :active="active == 'Notices'" id="Notices">
+          Notices
+        </vs-navbar-item>
         <vs-navbar-item @click="pushRouter('Users')" :active="active == 'Users'" id="Users">
           Users
         </vs-navbar-item>
@@ -16,12 +19,20 @@
         <vs-navbar-item @click="pushRouter('Challenges')" :active="active == 'Challenges'" id="Challenges">
           Challenges
         </vs-navbar-item>
+
+
         <template #right>
-          <vs-button @click="SigninActive=!SigninActive" color="#fff" border>Login</vs-button>
+            <div v-if="username!==undefined && username!==''">
+                <vs-button color="#fff" flat >Hi, {{ username }}</vs-button>
+            </div>
+            <div v-if="username==undefined || username==''">
+                <vs-button @click="signinForm.active =! signinForm.active" color="#fff" border>Login</vs-button>
+            </div>
         </template>
+
       </vs-navbar>
           <div class="center">
-            <vs-dialog blur v-model="SigninActive">
+            <vs-dialog blur v-model="signinForm.active">
                 <template #header>
                     <h4 class="not-margin">
                         Welcome to <b>CTFgo</b>
@@ -29,28 +40,68 @@
                 </template>
 
                 <div class="con-form">
-                <vs-input v-model="email" placeholder="Email"></vs-input>
-                <vs-input type="password" v-model="password" placeholder="Password"></vs-input>
-                <div class="flex">
-                    <vs-checkbox v-model="remember">Remember me</vs-checkbox>
-                    <vs-button transparent :active="SignupActive == 1" @click="SignupActive = 1">
-                        Forgot Password?
-                    </vs-button>
-                </div>
+                <vs-input v-model="signinForm.submit.username" placeholder="Username or email address"></vs-input>
+                <vs-input v-model="signinForm.submit.password" placeholder="Password" type="password" ></vs-input>
+                  <div class="flex">
+                      <vs-checkbox v-model="rememberme">Remember me</vs-checkbox>
+                      <vs-button transparent :active="forgotForm.active == 1" @click="forgotForm.active =! forgotForm.active">
+                          Forgot Password?
+                      </vs-button>
+                  </div>
                 </div>
 
                 <template #footer>
                 <div class="footer-dialog">
-                    <vs-button block>
+                    <vs-button @click="signin()" block>
                         Sign In
                     </vs-button>
                     <div class="new">
-                        <vs-button transparent :active="SignupActive == 1" @click="SignupActive = 1">
+                        <vs-button transparent :active="signupForm.active == 1" @click="signupForm.active =! signupForm.active">
                             New Here? Create New Account
                         </vs-button>
                     </div>
                 </div>
                 </template>
+
+                <vs-dialog blur v-model="signupForm.active">
+                  <template #header>
+                      <h4 class="not-margin">
+                          Create Account to Register
+                      </h4>
+                  </template>
+                  <div class="con-form">
+                    <vs-input v-model="signupForm.submit.email" placeholder="Email"></vs-input>
+                    <vs-input v-model="signupForm.submit.username" placeholder="Username"></vs-input>
+                    <vs-input v-model="signupForm.submit.password" type="password" placeholder="Password"></vs-input>
+                  </div>
+                  <template #footer>
+                    <div class="footer-dialog">
+                        <vs-button @click="signup()" block>
+                            Sign Up
+                        </vs-button>
+                    </div>
+                  </template>
+                </vs-dialog>
+<!--  Forgot Form -->
+                <vs-dialog blur v-model="forgotForm.active">
+                  <template #header>
+                      <h4 class="not-margin">
+                          Find Password
+                      </h4>
+                  </template>
+                  <div class="con-form">
+                    <vs-input v-model="forgotForm.email" placeholder="Email"></vs-input>
+                    <vs-input type="password" v-model="forgotForm.password" placeholder="Password"></vs-input>
+                  </div>
+                  <template #footer>
+                    <div class="footer-dialog">
+                        <vs-button block>
+                            Confirm
+                        </vs-button>
+                    </div>
+                  </template>
+                </vs-dialog>
+<!-- End Forgot Form -->
             </vs-dialog>
         </div>
     </div>
@@ -60,20 +111,32 @@
 export default {
     name: 'Navbar',
     data:() => ({
-        signinForm: {
-            username: '',
-            password: ''
-        },
-        signupForm: {
-            username: '',
-            usermail: '',
-            authcode: '',
-            password: '',
-            checkPassword: '',
-        },
-        active: 'Home',
-        SigninActive: false,
-        rememberme: false,
+      username: '',
+      signinForm: {
+        active: false,
+        submit:{
+          username: '',
+          password: ''
+        }
+      },
+      signupForm: {
+        active: false,
+        authcode: '',
+        checkPassword: '',
+        submit: {
+          email: '',
+          username: '',
+          password: ''
+        }
+      },
+      forgotForm: {
+        active: false,
+        usermail: '',
+        authcode: '',
+        mailcode: ''
+      },
+      active: 'Home',
+      rememberme: false
     }),
     methods: {
         pushRouter(adress){
@@ -88,7 +151,24 @@ export default {
             }else if(adress=='Challenges'){
                 this.$router.push('/challenges')
             }
-        }
+        },
+        async signin(){
+          const {data: result} = await this.$http.post('/login', this.signinForm.submit)
+            if (result.code == 200){
+              console.log('登录成功')
+              this.username = result.username
+            }else{
+              console.log('登录失败')
+            };
+        },
+        async signup(){
+          const {data: result} = await this.$http.post('/register', this.signupForm.submit)
+            if (result.code == 200){
+              console.log('注册成功')
+            }else{
+              console.log('注册失败')
+          };
+        },
     }
 }
 </script>
