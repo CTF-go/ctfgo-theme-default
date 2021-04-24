@@ -6,7 +6,7 @@ It is the default theme of CTFgo, whitch is written in vue.
 
 ## Tech stack
 
-vue2, vue-router, webpack, scss, vuesax
+vue2, vue-router, webpack, Stylus, Vuesax
 
 ## Usage
 
