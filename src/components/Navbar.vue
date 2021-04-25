@@ -23,7 +23,9 @@
 
         <template #right>
             <div v-if="username!==undefined && username!==''">
-                <vs-button color="#fff" flat >Hi, {{ username }}</vs-button>
+              <!--  <vs-button color="#fff" flat >Hi, {{ username }}</vs-button>-->
+                <menu-dropdown/>
+
             </div>
             <div v-if="username==undefined || username==''">
                 <vs-button @click="signinForm.active =! signinForm.active" color="#fff" border>Login</vs-button>
@@ -32,13 +34,14 @@
 
       </vs-navbar>
           <div class="center">
+
             <vs-dialog blur v-model="signinForm.active">
+<!-- Sign In Form -->
                 <template #header>
                     <h4 class="not-margin">
                         Welcome to <b>CTFgo</b>
                     </h4>
                 </template>
-
                 <div class="con-form">
                 <vs-input v-model="signinForm.submit.username" placeholder="Username or email address"></vs-input>
                 <vs-input v-model="signinForm.submit.password" placeholder="Password" type="password" ></vs-input>
@@ -62,7 +65,9 @@
                     </div>
                 </div>
                 </template>
+<!-- End Sign In Form -->
 
+<!-- Sign Up Form -->
                 <vs-dialog blur v-model="signupForm.active">
                   <template #header>
                       <h4 class="not-margin">
@@ -82,7 +87,9 @@
                     </div>
                   </template>
                 </vs-dialog>
-<!--  Forgot Form -->
+<!-- End Sign Up Form -->
+
+<!--  Forgot Password Form -->
                 <vs-dialog blur v-model="forgotForm.active">
                   <template #header>
                       <h4 class="not-margin">
@@ -101,17 +108,24 @@
                     </div>
                   </template>
                 </vs-dialog>
-<!-- End Forgot Form -->
+<!-- End Forgot Password Form -->
+
             </vs-dialog>
         </div>
     </div>
   </template>
+
 <script>
+import MenuDropdown from "@/components/MenuDropdown.vue";
+
 
 export default {
     name: 'Navbar',
+    components: {
+      MenuDropdown
+    },
     data:() => ({
-      username: '',
+      username: 'admin',
       signinForm: {
         active: false,
         submit:{
