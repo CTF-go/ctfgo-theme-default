@@ -16,7 +16,7 @@ You can use CTFgo without downloading this source code, because we have packaged
 
 ### For Developer
 
-Developers are welcome to perform secondary development on the CTFgo default theme. If possible, we are happy to include your themes here.
+Developers are welcome to secondary development on the CTFgo default theme. If possible, we are happy to include your themes here.
 
 Or you want to develop a brand new theme for CTFgo, this project may also be helpful to you.
 
