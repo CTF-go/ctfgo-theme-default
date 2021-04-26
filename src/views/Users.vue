@@ -1,5 +1,6 @@
 <template>
-    <div class="users-box center">
+    <div class="users-box">
+    <h1>Users</h1>
       <vs-table>
         <template #thead>
           <vs-tr>
@@ -120,11 +121,21 @@ export default {
 
 <style scoped>
 .users-box{
-    position: absolute;
-    top: 100px;
-    left: 50%;
-    transform: translate(-50%);
-    width: 760px;
-    max-width: 100%;
+  margin-top: 84px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  width: 760px;
+  max-width: 100%;
+}
+h1 {
+  color: #24292e;
+  font-size: 5rem;
+  font-weight: normal;
+  line-height: 48px;
+  margin: 0 0 50px;
+  text-align: center;
+  text-shadow: 1px 1px 2px #082b34;
+  user-select: none;
 }
 </style>
