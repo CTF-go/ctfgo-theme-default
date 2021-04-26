@@ -4,19 +4,19 @@
         <template #left>
           <img src="../assets/logo.png" alt="">
         </template>
-        <vs-navbar-item @click="pushRouter('Home')" :active="active == 'Home'" id="Home">
+        <vs-navbar-item @click="pushRouter('Home')" :active="active == '/home'" id="/home">
           Home
         </vs-navbar-item>
-        <vs-navbar-item @click="pushRouter('Notices')" :active="active == 'Notices'" id="Notices">
+        <vs-navbar-item @click="pushRouter('Notices')" :active="active == '/notices'" id="/notices">
           Notices
         </vs-navbar-item>
-        <vs-navbar-item @click="pushRouter('Users')" :active="active == 'Users'" id="Users">
+        <vs-navbar-item @click="pushRouter('Users')" :active="active == '/users'" id="/users">
           Users
         </vs-navbar-item>
-        <vs-navbar-item @click="pushRouter('ScoreBoard')" :active="active == 'ScoreBoard'" id="ScoreBoard">
+        <vs-navbar-item @click="pushRouter('ScoreBoard')" :active="active == '/scoreboard'" id="/scoreboard">
           ScoreBoard
         </vs-navbar-item>
-        <vs-navbar-item @click="pushRouter('Challenges')" :active="active == 'Challenges'" id="Challenges">
+        <vs-navbar-item @click="pushRouter('Challenges')" :active="active == '/challenges'" id="/challenges">
           Challenges
         </vs-navbar-item>
 
@@ -148,7 +148,7 @@ export default {
         authcode: '',
         mailcode: ''
       },
-      active: 'Home',
+      active: '/home',
       rememberme: false
     }),
     methods: {
@@ -191,6 +191,9 @@ export default {
             text
           })
         }
+    },
+    created(){
+      this.active = window.location.pathname
     }
 }
 </script>
