@@ -4,19 +4,19 @@
         <template #left>
           <img src="../assets/logo.png" alt="">
         </template>
-        <vs-navbar-item @click="pushRouter('Home')" :active="active == '/home'" id="/home">
+        <vs-navbar-item @click="pushRouter('/home')" :active="active == '/home'" id="/home">
           Home
         </vs-navbar-item>
-        <vs-navbar-item @click="pushRouter('Notices')" :active="active == '/notices'" id="/notices">
+        <vs-navbar-item @click="pushRouter('/notices')" :active="active == '/notices'" id="/notices">
           Notices
         </vs-navbar-item>
-        <vs-navbar-item @click="pushRouter('Users')" :active="active == '/users'" id="/users">
+        <vs-navbar-item @click="pushRouter('/users')" :active="active == '/users'" id="/users">
           Users
         </vs-navbar-item>
-        <vs-navbar-item @click="pushRouter('ScoreBoard')" :active="active == '/scoreboard'" id="/scoreboard">
+        <vs-navbar-item @click="pushRouter('/scoreboard')" :active="active == '/scoreboard'" id="/scoreboard">
           ScoreBoard
         </vs-navbar-item>
-        <vs-navbar-item @click="pushRouter('Challenges')" :active="active == '/challenges'" id="/challenges">
+        <vs-navbar-item @click="pushRouter('/challenges')" :active="active == '/challenges'" id="/challenges">
           Challenges
         </vs-navbar-item>
 
@@ -153,17 +153,7 @@ export default {
     }),
     methods: {
         pushRouter(adress){
-            if(adress=='Home'){
-                this.$router.push('/home')
-            }else if(adress=='Notices'){
-                this.$router.push('/notices')
-            }else if(adress=='Users'){
-                this.$router.push('/users')
-            }else if(adress=='ScoreBoard'){
-                this.$router.push('/scoreboard')
-            }else if(adress=='Challenges'){
-                this.$router.push('/challenges')
-            }
+          this.$router.push(adress)
         },
         async signin(){
           const {data: result} = await this.$http.post('/login', this.signinForm.submit)
