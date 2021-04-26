@@ -153,7 +153,9 @@ export default {
     }),
     methods: {
         pushRouter(adress){
-          this.$router.push(adress)
+          if (adress != window.location.pathname){
+            this.$router.push(adress)
+          }
         },
         async signin(){
           const {data: result} = await this.$http.post('/login', this.signinForm.submit)
