@@ -116,8 +116,7 @@
   </template>
 
 <script>
-import MenuDropdown from "@/components/MenuDropdown.vue";
-
+import MenuDropdown from "@/components/DropMenu.vue";
 
 export default {
     name: 'Navbar',
