@@ -3,10 +3,10 @@
     <vs-button @click="show()" color="#fff" flat >Hi, Admin</vs-button>
     <div class="menu__items">
         <ul v-if="toggle">
-          <button>Profile</button>
-          <button>Settings</button>
-          <button>Team</button>
           <button v-if="admin">Admin Panel</button>
+          <button>Profile</button>
+          <button>Team</button>
+          <button>Settings</button>
           <div role="none" class="dropdown-divider"></div>
           <button>Sign out</button>
         </ul>

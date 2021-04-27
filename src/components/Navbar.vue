@@ -125,6 +125,8 @@ export default {
     },
     data:() => ({
       username: 'admin',
+      active: '/home',
+      rememberme: false,
       signinForm: {
         active: false,
         submit:{
@@ -147,9 +149,7 @@ export default {
         usermail: '',
         authcode: '',
         mailcode: ''
-      },
-      active: '/home',
-      rememberme: false
+      }
     }),
     methods: {
         pushRouter(adress){
@@ -160,7 +160,6 @@ export default {
         async signin(){
           const {data: result} = await this.$http.post('/login', this.signinForm.submit)
             if (result.code == 200){
-              console.log('Success')
               this.openNotification('🥳 Success!', 'Hi, '+result.username+'. Welcome to CTFgo~')
               this.username = result.username
               this.signinForm.active = false

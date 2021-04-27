@@ -1,12 +1,32 @@
 <template>
     <div class="challenges">
         <h1>Challenges</h1>
+        <ChallengeBar />
+        <div class="cards">
+            <ChallengeCard />
+            <ChallengeCard />
+            <ChallengeCard />
+            <ChallengeCard />
+        </div>
     </div>
 </template>
+
+<script>
+import ChallengeBar from '../components/ChallengeBar'
+import ChallengeCard from '../components/ChallengeCard'
+
+export default {
+    components:{ ChallengeCard, ChallengeBar }
+}
+</script>
+
 
 <style scoped>
 .challenges{
     margin-top: 84px;
+}
+.cards{
+    margin-left: 184px;
 }
 h1 {
   color: #24292e;
