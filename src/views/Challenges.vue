@@ -2,7 +2,7 @@
     <div class="challenges">
         <h1>Challenges</h1>
         <ChallengeBar />
-        <div class="cards">
+        <div class="center">
             <ChallengeCard />
             <ChallengeCard />
             <ChallengeCard />
@@ -22,11 +22,15 @@ export default {
 
 
 <style scoped>
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    flex-wrap: wrap;
+}
 .challenges{
     margin-top: 84px;
-}
-.cards{
-    margin-left: 184px;
 }
 h1 {
   color: #24292e;

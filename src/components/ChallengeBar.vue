@@ -27,9 +27,8 @@ export default {
 
 .categories {
     display: block;
-    
     position: absolute;
-    left: 10px;
+    left: 160px;
     top: 244px;
     z-index: 2;
 }

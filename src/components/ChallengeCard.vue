@@ -1,20 +1,20 @@
 <template>
-    <div class="center">
-        <vs-button flat class="card"
+    <div class="challengecard">
+        <vs-button flat
             :active="active != active"
             @click="active =! active">
-            <h2>Challenge</h2>
+            <div class="challenge">
+              <h2>{{ name }}</h2>
+              <p>{{ score }}</p>
+            </div>
         </vs-button>
         <vs-dialog width="300px" not-center v-model="active">
             <template #header>
             <h2 class="not-margin">
                 {{ name }}
             </h2>
-            <p class="not-margin">{{ details }}</p>
-            
+            <p class="not-margin">{{ details }}</p>           
             </template>
-
-
             <div class="con-content">
             <vs-input v-model="inputflag" placeholder="flag{******}"></vs-input>
             </div>
@@ -37,7 +37,8 @@
 export default {
     props: {
         name: {type: String, default: 'Challenge Name'},
-        details: {type:String, default: 'Challenge details, more information of a challenge...'},
+        score: {type: String, default: '1000'},
+        details: {type:String, default: 'More information of a challenge...'},
         apiurl: {type: String, default: '/challenges/submit/1'}
     },
     data: function (){
@@ -51,9 +52,12 @@ export default {
 
 
 <style scoped>
-.card{
-    width: 160px;
-    height: 100px;
+.challengecard button{
+  width: 180px;
+  height: 100px;
+}
+.challenge h2{
+  font-size: 16px;
 }
 </style>
 
