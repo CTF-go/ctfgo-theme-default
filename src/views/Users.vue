@@ -42,7 +42,7 @@
 export default {
     data:() => ({
         page: 1,
-        max: 3,
+        max: 10,
         users: [
             {
                 "id": 1,

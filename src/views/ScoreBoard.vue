@@ -17,11 +17,10 @@ export default {
   data() {
     return {
       chartData: {
-        labels: ["AREA01", "ATT05", "COR01", "DOTA2"],
+        labels: ["8:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"],
         datasets: [
           {
-            backgroundColor: ["#41B883", "#E46651", "#00D8FF", "#DD1B16"],
-            data: [360, 190, 245, 420],
+            data: [0, 300, 330, 1330, 1825, 2635, 2950, 3660],
           },
         ],
       },
