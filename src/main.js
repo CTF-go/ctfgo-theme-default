@@ -1,14 +1,17 @@
 import Vue from 'vue'
+import './plugins/fontawesome'
 import './plugins/axios'
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import './plugins/vuesax.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faSpinner, faAlignLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { dom } from '@fortawesome/fontawesome-svg-core'
 
-library.add(faUserSecret)
+dom.watch()
+library.add(faUserSecret, faSpinner, faAlignLeft)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

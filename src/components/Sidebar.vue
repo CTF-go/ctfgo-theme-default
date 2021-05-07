@@ -9,57 +9,54 @@
         </template>
         <vs-sidebar-item id="home">
           <template #icon>
-            <font-awesome-icon icon="user-secret" />
+            <i class="fas fa-home"></i>
           </template>
           Home
         </vs-sidebar-item>
-        <vs-sidebar-item id="market">
+        <vs-sidebar-item id="notices">
           <template #icon>
-            <i class='bx bx-grid-alt'></i>
+            <i class="fas fa-bell"></i>
           </template>
-          Market Overview
+          Notices
         </vs-sidebar-item>
         <vs-sidebar-item id="Music">
           <template #icon>
-            <i class='bx bxs-music'></i>
+            <i class="fas fa-user-friends"></i>
           </template>
-          Music
+          Users
         </vs-sidebar-item>
         <vs-sidebar-item id="donate">
           <template #icon>
-            <i class='bx bxs-donate-heart' ></i>
+            <i class="fas fa-cubes"></i>
           </template>
-          Donate
+          Challenges
         </vs-sidebar-item>
         <vs-sidebar-item id="drink">
           <template #icon>
-            <i class='bx bx-drink'></i>
+            <i class="fas fa-flag"></i>
           </template>
-          Drink
+          Submissions
         </vs-sidebar-item>
         <vs-sidebar-item id="shopping">
           <template #icon>
-            <i class='bx bxs-shopping-bags'></i>
+            <i class="fas fa-cogs"></i>
           </template>
-          Shopping
-        </vs-sidebar-item>
-        <vs-sidebar-item id="chat">
-          <template #icon>
-            <i class='bx bx-chat' ></i>
-          </template>
-          Chat
+          Config
         </vs-sidebar-item>
       </vs-sidebar>
     </div>
 </template>
 <script>
+import { faAddressCard } from '@fortawesome/free-solid-svg-icons'
 export default {
+  components: { faAddressCard},
     data:() => ({
         active: 'home',
     })
 }
 </script>
 <style scoped>
+
 .vs-sidebar-content{
     margin-top: 44px;
     height: 100%;
