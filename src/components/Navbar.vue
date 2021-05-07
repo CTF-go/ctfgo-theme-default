@@ -19,17 +19,16 @@
         <vs-navbar-item @click="pushRouter('/challenges')" :active="active == '/challenges'" id="/challenges">
           Challenges
         </vs-navbar-item>
+        <vs-navbar-item v-if="admin" @click="pushRouter('/dashboard')" :active="active == '/dashboard'" id="/dashboard">
+          Dashboard
+        </vs-navbar-item>
 
 
         <template #right>
-            <div v-if="username!==undefined && username!==''">
-              <!--  <vs-button color="#fff" flat >Hi, {{ username }}</vs-button>-->
-                <menu-dropdown/>
-
-            </div>
             <div v-if="username==undefined || username==''">
                 <vs-button @click="signinForm.active =! signinForm.active" color="#fff" border>Login</vs-button>
             </div>
+            <div v-else><menu-dropdown :username='username'/></div>
         </template>
 
       </vs-navbar>
@@ -124,7 +123,8 @@ export default {
       MenuDropdown
     },
     data:() => ({
-      username: 'admin',
+      username: 'Am473ur',
+      admin: true,
       active: '/home',
       rememberme: false,
       signinForm: {

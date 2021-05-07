@@ -1,5 +1,5 @@
 <template>
-  <div class="index">
+  <div>
     <Navbar/>
     <router-view/>
     <Footer/>
@@ -10,7 +10,7 @@
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 export default {
-  name: 'Index',
-  components: { Navbar, Footer }
+    name: 'Index',
+    components: { Navbar, Footer }
 }
 </script>

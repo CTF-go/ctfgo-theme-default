@@ -30,8 +30,17 @@ const routes = [
       {
         path: 'challenges',
         component: () => import('../views/Challenges.vue')
+      },
+      {
+        path: 'dashboard',
+        component: () => import('../views/Dashboard.vue')
       }
     ]
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('../views/Profile.vue')
   }
 ]
 
