@@ -5,10 +5,6 @@
             <NoticeCard/>
             <NoticeCard/>
             <NoticeCard/>
-            <NoticeCard/>
-            <NoticeCard/>
-            <NoticeCard/>
-            <NoticeCard/>
         </div>
     </div>
 </template>
