@@ -1,23 +1,22 @@
 <template>
   <div>
-    <vs-button @click="show()" color="#fff" flat >Hi, Admin</vs-button>
+    <vs-button @click="show()" color="#fff" flat >Hi, {{ username }}</vs-button>
     <div class="menu__items">
         <ul v-if="toggle">
-          <button v-if="admin">Admin Panel</button>
-          <button>Profile</button>
+          <button @click="pushRouter('/profile')">Profile</button>
           <button>Team</button>
           <button>Settings</button>
           <div role="none" class="dropdown-divider"></div>
           <button>Sign out</button>
         </ul>
     </div>
-    </div>
+  </div>
 </template>
 
 <script>
 export default {
   props: {
-    admin: {type: Boolean, default: false}
+    username: {type: String, default: 'Not Found'}
   },
   data() {
     return {
@@ -28,10 +27,15 @@ export default {
     show() {
       document.addEventListener('click', this.hideMenu)
     },
+    pushRouter(adress){
+        if (adress != window.location.pathname){
+            this.$router.push(adress)
+        }
+    },
     hideMenu (e) {
       this.toggle = !this.toggle
       if(!this.toggle){
-        document.removeEventListener('click', this.hideMenu)
+          document.removeEventListener('click', this.hideMenu)
       }
     }
   }
