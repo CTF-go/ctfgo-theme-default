@@ -1,2 +1,2 @@
 (window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-1d3b1ab7"],{4351:function(t,n,e){t.exports=e.p+"img/ctfgo-logo-long.034475b9.png"},"6dea":function(t,n,e){"use strict";e("931a")},"931a":function(t,n,e){},bb51:function(t,n,e){"use strict";e.r(n);var o=function(){var t=this,n=t.$createElement;t._self._c;return t._m(0)},c=[function(){var t=this,n=t.$createElement,o=t._self._c||n;return o("div",{staticClass:"home"},[o("div",{staticClass:"logo"},[o("img",{attrs:{src:e("4351"),alt:"Logo of CTFgo"}})])])}],s=(e("6dea"),e("2877")),a={},i=Object(s["a"])(a,o,c,!1,null,"5dc5c9ff",null);n["default"]=i.exports}}]);
-//# sourceMappingURL=chunk-1d3b1ab7.697b5f27.js.map
+//# sourceMappingURL=chunk-1d3b1ab7.c19c80d2.js.map
