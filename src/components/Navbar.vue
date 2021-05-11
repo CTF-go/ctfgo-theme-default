@@ -58,7 +58,7 @@
                         Sign In
                     </vs-button>
                     <div class="new">
-                        <vs-button transparent :active="signupForm.active == 1" @click="signupForm.active =! signupForm.active">
+                        <vs-button transparent :active="signupForm.active == 1" @click="loadSignupForm()">
                             New Here? Create New Account
                         </vs-button>
                     </div>
@@ -77,7 +77,10 @@
                     <vs-input v-model="signupForm.submit.email" placeholder="Email"></vs-input>
                     <vs-input v-model="signupForm.submit.username" placeholder="Username"></vs-input>
                     <vs-input v-model="signupForm.submit.password" type="password" placeholder="Password"></vs-input>
+                    <vs-input v-model="signupForm.checkPassword" type="checkPassword" placeholder="Confirm Password"></vs-input>
+                    <vs-input v-model="signupForm.solution" placeholder="Auth Code"></vs-input>
                   </div>
+                  <div class="authcode-img"><img @click="getCaptchaID()" v-bind:src="signupForm.image" alt="验证码图片"></div>
                   <template #footer>
                     <div class="footer-dialog">
                         <vs-button @click="signup()" block>
@@ -95,6 +98,8 @@
                           Find Password
                       </h4>
                   </template>
+                  <div><h2>爬，密码都能忘？💩</h2></div>
+                  <!--
                   <div class="con-form">
                     <vs-input v-model="forgotForm.email" placeholder="Email"></vs-input>
                     <vs-input type="password" v-model="forgotForm.password" placeholder="Password"></vs-input>
@@ -106,6 +111,7 @@
                         </vs-button>
                     </div>
                   </template>
+                   -->
                 </vs-dialog>
 <!-- End Forgot Password Form -->
 
@@ -123,7 +129,7 @@ export default {
       MenuDropdown
     },
     data:() => ({
-      username: 'Am473ur',
+      username: '',
       admin: true,
       active: '/home',
       rememberme: false,
@@ -136,12 +142,14 @@ export default {
       },
       signupForm: {
         active: false,
-        authcode: '',
+        solution: '',
         checkPassword: '',
+        image: '',
+        id: '',
         submit: {
           email: '',
           username: '',
-          password: ''
+          password: '',
         }
       },
       forgotForm: {
@@ -157,6 +165,17 @@ export default {
             this.$router.push(adress)
           }
         },
+        loadSignupForm(){
+          this.signupForm.active =! this.signupForm.active
+          this.getCaptchaID()
+        },
+        async getCaptchaID(){
+          const {data: result} = await this.$http.get('/captcha')
+          if (result.code == 200){
+            this.signupForm.image = 'data:image/png;base64,'+result.data
+            this.signupForm.id = result.id
+          }
+        },
         async signin(){
           const {data: result} = await this.$http.post('/login', this.signinForm.submit)
             if (result.code == 200){
@@ -168,12 +187,23 @@ export default {
             };
         },
         async signup(){
-          const {data: result} = await this.$http.post('/register', this.signupForm.submit)
-            if (result.code == 200){
-              console.log('注册成功')
+          console.log({id: this.signupForm.id, solution: this.signupForm.solution})
+          const {data: result1} = await this.$http.post('/captcha', {id: this.signupForm.id, solution: this.signupForm.solution})
+          
+          if (result1.code != 200){
+            this.openNotification('👎 验证码都看不清？')
+            return
+          }
+          const {data: result2} = await this.$http.post('/register', this.signupForm.submit)
+            if (result2.code == 200){
+              this.openNotification('🥳 Congratulations～ Sign up success!')
+            }else if (result2.code == 1000){
+              this.openNotification('用户名重复')
+            }else if (result2.code == 1001){
+              this.openNotification('邮箱重复')
             }else{
-              console.log('注册失败')
-          };
+              this.openNotification('注册失败')
+            };
         },
         openNotification(title, text) {
           const noti = this.$vs.notification({
@@ -192,6 +222,19 @@ export default {
 <style scoped>
 .vs-navbar img{
     height: 25px;
+}
+.authcode-img{
+  height: 40px;
+  width: 120px;
+  border-radius: 5px;
+  border-color: black;
+}
+.authcode-form{
+  display: flex;
+  width: 25%;
+}
+.authcode-form input{
+ width: 100px;
 }
 </style>
 

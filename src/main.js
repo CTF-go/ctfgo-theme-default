@@ -15,7 +15,7 @@ library.add(faUserSecret, faSpinner, faAlignLeft)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-axios.defaults.baseURL = 'http://localhost:8081/v1/'
+axios.defaults.baseURL = 'http://192.168.2.103:8081/v1/'
 Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
