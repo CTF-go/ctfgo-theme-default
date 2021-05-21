@@ -1,16 +1,17 @@
 <template>
-    <div class="profile">
-        <h1>Profile</h1>
+    <div class="team">
+        <h1>Team</h1>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'Profile',
+    name: 'Team',
 }
 </script>
+
 <style scoped>
-.profile{
+.team{
     margin-top: 84px;
 }
 h1 {

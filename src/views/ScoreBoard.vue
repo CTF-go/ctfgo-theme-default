@@ -1,10 +1,41 @@
 <template>
-  <div class="scoreboard">
-    <h1>Score Board</h1>
+<div class="scoreboard">
+    <h1>Scoreboard</h1>
     <div class="scoreboard-chart">
-      <LineChart :chartData="chartData" :options="options"></LineChart>
+        <LineChart :chartData="chartData" :options="options"></LineChart>
     </div>
-  </div>
+    <div class="users">
+        <vs-table>
+            <template #thead>
+                <vs-tr>
+                    <vs-th>Ranking</vs-th>
+                    <vs-th>Score</vs-th>
+                    <vs-th>Username</vs-th>
+                    <vs-th>Country</vs-th>
+                </vs-tr>
+            </template>
+            <template #tbody>
+                <vs-tr
+                    :key="i"
+                    v-for="(tr, i) in $vs.getPage(users, page, max)"
+                    :data="tr"
+                >
+                    <vs-td>{{ (page-1)*max+i+1 }}</vs-td>
+                    
+                    <vs-td>
+                        <a style="font-size:20px">🇦🇺</a>
+                        {{ tr.User }}
+                        <a href="https://www.baidu.com"><i class="fas fa-external-link-alt"></i></a>
+                    </vs-td>
+                    <vs-td>{{ tr.Score }}</vs-td>
+                </vs-tr>
+            </template>
+            <template #footer>
+                <vs-pagination v-model="page" :length="$vs.getLength(users, max)" />
+            </template>
+        </vs-table>
+    </div>
+</div>
 </template>
 
 <script>
@@ -16,24 +47,52 @@ export default {
   },
   data() {
     return {
-      chartData: {
-        labels: ["8:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"],
-        datasets: [
-          {
-            data: [0, 300, 330, 1330, 1825, 2635, 2950, 3660],
-          },
+        page: 1,
+        max: 2,
+        users: [
+            {
+                "User": "Bret",
+                "Score": 100,
+                /*"Affiliation": "X1cT34m",*/
+            }
         ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-      },
+        chartData: {
+            labels: ["8:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"],
+            datasets: [
+                {
+                data: [0, 300, 330, 1330, 1825, 2635, 2950, 3660],
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        },
     };
   },
+  methods:{
+      async getUsersData(){
+          const {data: result} = await this.$http.get('/scores/all')
+          this.users = result['data']
+      }
+  },
+    mounted:function(){
+        this.getUsersData();//需要触发的函数
+    }
 };
 </script>
 
 <style scoped>
+.users{
+    /*background-color: #007779;*/
+    top: 600px;
+    width: 800px;
+    position: absolute;
+    left: 50%;
+    max-width: 90%;
+    transform: translate(-50%);
+    padding: 10px;
+}
 .scoreboard {
   margin-top: 84px;
 }

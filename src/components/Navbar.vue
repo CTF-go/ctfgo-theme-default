@@ -10,11 +10,8 @@
         <vs-navbar-item @click="pushRouter('/notices')" :active="active == '/notices'" id="/notices">
           Notices
         </vs-navbar-item>
-        <vs-navbar-item @click="pushRouter('/users')" :active="active == '/users'" id="/users">
-          Users
-        </vs-navbar-item>
         <vs-navbar-item @click="pushRouter('/scoreboard')" :active="active == '/scoreboard'" id="/scoreboard">
-          ScoreBoard
+          Scoreboard
         </vs-navbar-item>
         <vs-navbar-item @click="pushRouter('/challenges')" :active="active == '/challenges'" id="/challenges">
           Challenges
@@ -129,7 +126,7 @@ export default {
       MenuDropdown
     },
     data:() => ({
-      username: '',
+      username: 'admin',
       admin: true,
       active: '/home',
       rememberme: false,

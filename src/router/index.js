@@ -20,12 +20,8 @@ const routes = [
         component: () => import('../views/Notices.vue')
       },
       {
-        path: 'users',
-        component: () => import('../views/Users.vue')
-      },
-      {
         path: 'scoreboard',
-        component: () => import('../views/ScoreBoard.vue')
+        component: () => import('../views/Scoreboard.vue')
       },
       {
         path: 'challenges',
@@ -34,14 +30,22 @@ const routes = [
       {
         path: 'dashboard',
         component: () => import('../views/Dashboard.vue')
+      },
+      {
+        path: '/profile',
+        component: () => import('../views/Profile.vue')
+      },
+      {
+        path: '/team',
+        component: () => import('../views/Team.vue')
+      },
+      {
+        path: '/settings',
+        component: () => import('../views/Settings.vue')
       }
     ]
   },
-  {
-    path: '/profile',
-    name: 'Profile',
-    component: () => import('../views/Profile.vue')
-  }
+  
 ]
 
 const router = new VueRouter({

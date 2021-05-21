@@ -42,13 +42,12 @@
 export default {
     data:() => ({
         page: 1,
-        max: 10,
+        max: 5,
         users: [
             {
                 "id": 1,
                 "name": "Leanne Graham",
                 "username": "Bret",
-                "email": "Sincere@april.biz",
                 "website": "hildegard.org",
             },
             {
