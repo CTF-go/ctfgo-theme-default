@@ -1,9 +1,7 @@
 <template>
     <div class="center examplex">
       <vs-navbar color="#24292e" text-white square center-collapsed v-model="active">
-        <template #left>
-          <img src="../assets/logo.png" alt="">
-        </template>
+        <template #left><img src="../assets/logo.png" alt=""></template>
         <vs-navbar-item @click="pushRouter('/home')" :active="active == '/home'" id="/home">
           Home
         </vs-navbar-item>
@@ -19,7 +17,6 @@
         <vs-navbar-item v-if="admin" @click="pushRouter('/dashboard')" :active="active == '/dashboard'" id="/dashboard">
           Dashboard
         </vs-navbar-item>
-
 
         <template #right>
             <div v-if="username==undefined || username==''">
@@ -75,9 +72,10 @@
                     <vs-input v-model="signupForm.submit.username" placeholder="Username"></vs-input>
                     <vs-input v-model="signupForm.submit.password" type="password" placeholder="Password"></vs-input>
                     <vs-input v-model="signupForm.checkPassword" type="checkPassword" placeholder="Confirm Password"></vs-input>
-                    <vs-input v-model="signupForm.solution" placeholder="Auth Code"></vs-input>
+                    <div style="width: 100px;background-color:#447788"><vs-input style="width: 100px;" v-model="signupForm.solution" placeholder="Auth Code"></vs-input></div>
+                    <div class="authcode-img;background-color:#447788"><img style="height: 40px;vertical-align:middle" @click="getCaptchaID()" v-bind:src="signupForm.image" alt="验证码图片"></div>
                   </div>
-                  <div class="authcode-img"><img @click="getCaptchaID()" v-bind:src="signupForm.image" alt="验证码图片"></div>
+                  
                   <template #footer>
                     <div class="footer-dialog">
                         <vs-button @click="signup()" block>
@@ -126,7 +124,7 @@ export default {
       MenuDropdown
     },
     data:() => ({
-      username: 'admin',
+      username: '',
       admin: true,
       active: '/home',
       rememberme: false,
@@ -222,7 +220,7 @@ export default {
 }
 .authcode-img{
   height: 40px;
-  width: 120px;
+  width: 60px;
   border-radius: 5px;
   border-color: black;
 }
