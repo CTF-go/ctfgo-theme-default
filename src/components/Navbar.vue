@@ -20,7 +20,7 @@
 
         <template #right>
             <div v-if="username==undefined || username==''">
-                <vs-button @click="signinForm.active =! signinForm.active" color="#fff" border>Login</vs-button>
+                <vs-button @click="loginForm.active =! loginForm.active" color="#fff" border>Login</vs-button>
             </div>
             <div v-else><menu-dropdown :username='username'/></div>
         </template>
@@ -28,7 +28,7 @@
       </vs-navbar>
           <div class="center">
 
-            <vs-dialog blur v-model="signinForm.active">
+            <vs-dialog blur v-model="loginForm.active">
 <!-- Sign In Form -->
                 <template #header>
                     <h4 class="not-margin">
@@ -36,8 +36,8 @@
                     </h4>
                 </template>
                 <div class="con-form">
-                <vs-input v-model="signinForm.submit.username" placeholder="Username or email address"></vs-input>
-                <vs-input v-model="signinForm.submit.password" placeholder="Password" type="password" ></vs-input>
+                <vs-input v-model="loginForm.submit.username" placeholder="Username or email address"></vs-input>
+                <vs-input v-model="loginForm.submit.password" placeholder="Password" type="password" ></vs-input>
                   <div class="flex">
                       <vs-checkbox v-model="rememberme">Remember me</vs-checkbox>
                       <vs-button transparent :active="forgotForm.active == 1" @click="forgotForm.active =! forgotForm.active">
@@ -68,12 +68,54 @@
                       </h4>
                   </template>
                   <div class="con-form">
-                    <vs-input v-model="signupForm.submit.email" placeholder="Email"></vs-input>
-                    <vs-input v-model="signupForm.submit.username" placeholder="Username"></vs-input>
-                    <vs-input v-model="signupForm.submit.password" type="password" placeholder="Password"></vs-input>
-                    <vs-input v-model="signupForm.checkPassword" type="checkPassword" placeholder="Confirm Password"></vs-input>
-                    <div style="width: 100px;background-color:#447788"><vs-input style="width: 100px;" v-model="signupForm.solution" placeholder="Auth Code"></vs-input></div>
-                    <div class="authcode-img;background-color:#447788"><img style="height: 40px;vertical-align:middle" @click="getCaptchaID()" v-bind:src="signupForm.image" alt="验证码图片"></div>
+                    <vs-input v-model="signupForm.submit.email" placeholder="Email">
+                        <template v-if="validEmail" #message-success>
+                            Email Valid
+                        </template>
+                        <template v-if="!validEmail && signupForm.submit.email !== ''" #message-danger>
+                            Email Invalid
+                        </template>
+                    </vs-input>
+                    <vs-input v-model="signupForm.submit.username" placeholder="Username">
+                        <template v-if="this.signupForm.submit.username.length<=10" #message-success>
+                            Username Valid
+                        </template>
+                        <template v-if="this.signupForm.submit.username.length>10 && signupForm.submit.username !== ''" #message-danger>
+                            Username is too long
+                        </template>
+                    </vs-input>
+                    <vs-input v-model="signupForm.submit.password" type="password" placeholder="Password">
+                        <template v-if="this.signupForm.submit.password.length<=20 && this.signupForm.submit.password.length>=6" #message-success>
+                            Password Valid
+                        </template>
+                        <template v-if="this.signupForm.submit.password.length>20 && signupForm.submit.password !== ''" #message-danger>
+                            Password is too long
+                        </template>
+                        <template v-if="this.signupForm.submit.password.length<6 && signupForm.submit.password !== ''" #message-warn>
+                            Password is too short
+                        </template>
+                    </vs-input>
+                    <vs-input v-model="signupForm.checkPassword" type="password" placeholder="Confirm Password">
+                        <template v-if="this.signupForm.checkPassword===this.signupForm.submit.password && signupForm.checkPassword !== ''" #message-success>
+                            Confirm Password Valid
+                        </template>
+                        <template v-if="this.signupForm.checkPassword!==this.signupForm.submit.password && signupForm.checkPassword !== ''" #message-danger>
+                            The two passwords are not same
+                        </template>
+                    </vs-input>
+                    <div style="width:300px;">
+                        <div style="float:left; width: 160px;" >
+                            <vs-input style="width:160px;" v-model="signupForm.solution" placeholder="Auth Code">
+                                <template v-if="validAuthCode && signupForm.solution !== ''" #message-success>
+                                    Auth Code Valid
+                                </template>
+                                <template v-if="!validAuthCode && signupForm.solution !== ''" #message-danger>
+                                    Auth Code Invalid
+                                </template>
+                            </vs-input>
+                        </div>
+                      <div class="authcode-img" style="margin-right:0; float:right; width:100px;"><img v-bind:src="signupForm.image" @click="getCaptchaID()" style="width:100px;height:50px;" alt="验证码图片"></div>
+                    </div>
                   </div>
                   
                   <template #footer>
@@ -128,7 +170,7 @@ export default {
       admin: true,
       active: '/home',
       rememberme: false,
-      signinForm: {
+      loginForm: {
         active: false,
         submit:{
           username: '',
@@ -154,6 +196,20 @@ export default {
         mailcode: ''
       }
     }),
+    computed: {
+        validEmail() {
+          return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.signupForm.submit.email)
+        },
+        async validAuthCode(){
+            console.log("validAuthCode")
+            const {data: result} = await this.$http.post('/captcha', {id: this.signupForm.id, solution: this.signupForm.solution})
+            if (result.code != 200){
+                return false
+            }else {
+                return true
+            }
+        }
+    },
     methods: {
         pushRouter(adress){
           if (adress != window.location.pathname){
@@ -172,23 +228,20 @@ export default {
           }
         },
         async signin(){
-          const {data: result} = await this.$http.post('/login', this.signinForm.submit)
+            if (this.loginForm.submit.username=='' || this.loginForm.submit.password==''){
+                this.openNotification('👎 用户名和密码不能为空')
+                return
+            }
+            const {data: result} = await this.$http.post('/login', this.loginForm.submit)
             if (result.code == 200){
-              this.openNotification('🥳 Success!', 'Hi, '+result.username+'. Welcome to CTFgo~')
-              this.username = result.username
-              this.signinForm.active = false
+                this.openNotification('🥳 Success!', 'Hi, '+result.username+'. Welcome to CTFgo~')
+                this.username = result.username
+                this.loginForm.active = false
             }else{
               this.openNotification('👎 Login failed!', 'Plese check your <strong>username</strong> or <strong>password</strong>.')
             };
         },
         async signup(){
-          console.log({id: this.signupForm.id, solution: this.signupForm.solution})
-          const {data: result1} = await this.$http.post('/captcha', {id: this.signupForm.id, solution: this.signupForm.solution})
-          
-          if (result1.code != 200){
-            this.openNotification('👎 验证码都看不清？')
-            return
-          }
           const {data: result2} = await this.$http.post('/register', this.signupForm.submit)
             if (result2.code == 200){
               this.openNotification('🥳 Congratulations～ Sign up success!')
