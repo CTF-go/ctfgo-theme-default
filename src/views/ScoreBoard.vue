@@ -9,8 +9,8 @@
             <template #thead>
                 <vs-tr>
                     <vs-th>Ranking</vs-th>
-                    <vs-th>Score</vs-th>
                     <vs-th>Username</vs-th>
+                    <vs-th>Score</vs-th>
                     <vs-th>Country</vs-th>
                 </vs-tr>
             </template>
@@ -21,13 +21,13 @@
                     :data="tr"
                 >
                     <vs-td>{{ (page-1)*max+i+1 }}</vs-td>
-                    
+
                     <vs-td>
-                        <a style="font-size:20px">🇦🇺</a>
                         {{ tr.User }}
                         <a href="https://www.baidu.com"><i class="fas fa-external-link-alt"></i></a>
                     </vs-td>
                     <vs-td>{{ tr.Score }}</vs-td>
+                    <vs-td><a style="font-size:20px">🇨🇳</a></vs-td>
                 </vs-tr>
             </template>
             <template #footer>
@@ -51,8 +51,8 @@ export default {
         max: 2,
         users: [
             {
-                "User": "Bret",
-                "Score": 100,
+                "User": "Bob",
+                "Score": 1000,
                 /*"Affiliation": "X1cT34m",*/
             }
         ],
