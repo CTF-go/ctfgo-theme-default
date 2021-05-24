@@ -64,7 +64,7 @@
                 <vs-dialog blur v-model="signupForm.active">
                   <template #header>
                       <h4 class="not-margin">
-                          Create Account to Register
+                          Create Account
                       </h4>
                   </template>
                   <div class="con-form">
@@ -77,7 +77,7 @@
                         </template>
                     </vs-input>
                     <vs-input v-model="signupForm.submit.username" placeholder="Username">
-                        <template v-if="this.signupForm.submit.username.length<=10" #message-success>
+                        <template v-if="this.signupForm.submit.username.length<=10 && signupForm.submit.username !== ''" #message-success>
                             Username Valid
                         </template>
                         <template v-if="this.signupForm.submit.username.length>10 && signupForm.submit.username !== ''" #message-danger>
@@ -105,13 +105,7 @@
                     </vs-input>
                     <div style="width:300px;">
                         <div style="float:left; width: 160px;" >
-                            <vs-input style="width:160px;" v-model="signupForm.solution" placeholder="Auth Code">
-                                <template v-if="validAuthCode && signupForm.solution !== ''" #message-success>
-                                    Auth Code Valid
-                                </template>
-                                <template v-if="!validAuthCode && signupForm.solution !== ''" #message-danger>
-                                    Auth Code Invalid
-                                </template>
+                            <vs-input style="width:160px;" v-model="signupForm.submit.solution" placeholder="Auth Code">
                             </vs-input>
                         </div>
                       <div class="authcode-img" style="margin-right:0; float:right; width:100px;"><img v-bind:src="signupForm.image" @click="getCaptchaID()" style="width:100px;height:50px;" alt="验证码图片"></div>
@@ -179,12 +173,12 @@ export default {
       },
       signupForm: {
         active: false,
-        solution: '',
         checkPassword: '',
         image: '',
         id: '',
         submit: {
           email: '',
+          solution: '',
           username: '',
           password: '',
         }
@@ -200,15 +194,10 @@ export default {
         validEmail() {
           return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.signupForm.submit.email)
         },
-        async validAuthCode(){
-            console.log("validAuthCode")
-            const {data: result} = await this.$http.post('/captcha', {id: this.signupForm.id, solution: this.signupForm.solution})
-            if (result.code != 200){
-                return false
-            }else {
-                return true
-            }
-        }
+        async isExisted() { // 检查用户名或邮箱在数据库中是否已存在
+          const {data: result} = await this.$http.post('/register/isexisted', this.loginForm.submit)
+          return true
+        },
     },
     methods: {
         pushRouter(adress){
@@ -244,7 +233,7 @@ export default {
         async signup(){
           const {data: result2} = await this.$http.post('/register', this.signupForm.submit)
             if (result2.code == 200){
-              this.openNotification('🥳 Congratulations～ Sign up success!')
+              this.openNotification('🥳 Congratulations～ Registration success!')
             }else if (result2.code == 1000){
               this.openNotification('用户名重复')
             }else if (result2.code == 1001){

@@ -4,14 +4,24 @@
             {{ title }}
         </template>
             {{ message }}
+            <div class="created-time">{{ created_time }}</div>
     </vs-alert>
 </template>
 
 <script>
 export default {
     props: {
-        title: {type: String, default: 'Vuesax Framework'},
-        message: {type: String, default: 'Vuesax (pronounced / vjusacksː /, as view sacks) is a <b>UI components framework</b> created with <a href="https://vuejs.org/">Vuejs</a> to make projects easily and with a Unique and pleasant style, Vuesax is created from scratch and designed for all types of developed from the frontend lover to the backend that wants to easily create your visual approach to the end user'}
+        title: {type: String, default: 'Hi, there'},
+        message: {type: String, default: 'This is a default message.'},
+        created_time: {type: String, default: '2006-01-02 15:04:05'}
     }
 }
 </script>
+<style scoped>
+.created-time{
+    position: absolute;
+    color: #BDBEC0;
+    padding: 10px;
+    right: 0;
+}
+</style>
