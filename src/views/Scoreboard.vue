@@ -27,7 +27,7 @@
                         <a href="https://www.baidu.com"><i class="fas fa-external-link-alt"></i></a>
                     </vs-td>
                     <vs-td>{{ tr.score }}</vs-td>
-                    <vs-td><a style="font-size:20px">🇨🇳</a></vs-td>
+                    <vs-td><a style="font-size:20px">{{ countryFlags.cn }}</a></vs-td>
                 </vs-tr>
             </template>
             <template #footer>
@@ -40,7 +40,6 @@
 
 <script>
 import LineChart from "../components/LineChart.vue";
-
 export default {
   components: {
     LineChart,
@@ -49,6 +48,7 @@ export default {
     return {
         page: 1,
         max: 2,
+        countryFlags,
         users: [
             {
                 "username": "Bob",
@@ -72,7 +72,7 @@ export default {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-        },
+        }
     };
   },
   methods:{

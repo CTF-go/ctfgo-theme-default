@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import './plugins/vuesax.js'
+import "./assets/flags.js" // countrys flags
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret, faSpinner, faAlignLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'

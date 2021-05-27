@@ -13,7 +13,6 @@ export default {
         type: Array,
         default: function () {return ['Web', 'Re', 'Pwn', 'Crypto', 'Misc']}
     }
-
   },
   data() {
     return {
