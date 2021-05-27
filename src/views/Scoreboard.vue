@@ -11,7 +11,6 @@
                     <vs-th>Ranking</vs-th>
                     <vs-th>Username</vs-th>
                     <vs-th>Score</vs-th>
-                    <vs-th>Country</vs-th>
                 </vs-tr>
             </template>
             <template #tbody>
@@ -27,7 +26,6 @@
                         <a href="https://www.baidu.com"><i class="fas fa-external-link-alt"></i></a>
                     </vs-td>
                     <vs-td>{{ tr.score }}</vs-td>
-                    <vs-td><a style="font-size:20px">{{ countryFlags.cn }}</a></vs-td>
                 </vs-tr>
             </template>
             <template #footer>
