@@ -22,7 +22,19 @@
             <div v-if="username==undefined || username==''">
                 <vs-button @click="loginForm.active =! loginForm.active" color="#fff" border>Login</vs-button>
             </div>
-            <div v-else><menu-dropdown :username='username'/></div>
+
+            <vs-button v-else @click="showDropMenu()" color="#fff" flat >Hi, {{ username }}</vs-button>
+            
+            <div class="menu__items">
+                <ul v-if="toggleDropMenu">
+                  <button @click="pushRouter('/profile')">Profile</button>
+                  <!--<button @click="pushRouter('/team')">Team</button>-->
+                  <button @click="pushRouter('/settings')">Settings</button>
+                  <div role="none" class="dropdown-divider"></div>
+                  <button @click="logout()">Log out</button>
+                </ul>
+            </div>
+
         </template>
 
       </vs-navbar>
@@ -49,7 +61,7 @@
                 <template #footer>
                 <div class="footer-dialog">
                     <vs-button @click="signin()" block>
-                        Sign In
+                        Log In
                     </vs-button>
                     <div class="new">
                         <vs-button transparent :active="signupForm.active == 1" @click="loadSignupForm()">
@@ -85,21 +97,21 @@
                         </template>
                     </vs-input>
                     <vs-input v-model="signupForm.submit.password" type="password" placeholder="Password">
-                        <template v-if="this.signupForm.submit.password.length<=20 && this.signupForm.submit.password.length>=6" #message-success>
+                        <template v-if="signupForm.submit.password.length<=20 && this.signupForm.submit.password.length>=6" #message-success>
                             Password Valid
                         </template>
-                        <template v-if="this.signupForm.submit.password.length>20 && signupForm.submit.password !== ''" #message-danger>
+                        <template v-if="signupForm.submit.password.length>20 && signupForm.submit.password !== ''" #message-danger>
                             Password is too long
                         </template>
-                        <template v-if="this.signupForm.submit.password.length<6 && signupForm.submit.password !== ''" #message-warn>
+                        <template v-if="signupForm.submit.password.length<6 && signupForm.submit.password !== ''" #message-warn>
                             Password is too short
                         </template>
                     </vs-input>
                     <vs-input v-model="signupForm.checkPassword" type="password" placeholder="Confirm Password">
-                        <template v-if="this.signupForm.checkPassword===this.signupForm.submit.password && signupForm.checkPassword !== ''" #message-success>
+                        <template v-if="signupForm.checkPassword===signupForm.submit.password && signupForm.checkPassword !== ''" #message-success>
                             Confirm Password Valid
                         </template>
-                        <template v-if="this.signupForm.checkPassword!==this.signupForm.submit.password && signupForm.checkPassword !== ''" #message-danger>
+                        <template v-if="signupForm.checkPassword!==signupForm.submit.password && signupForm.checkPassword !== ''" #message-danger>
                             The two passwords are not same
                         </template>
                     </vs-input>
@@ -161,6 +173,7 @@ export default {
     },
     data:() => ({
       username: '',
+      toggleDropMenu: false,
       admin: true,
       active: '/home',
       rememberme: false,
@@ -175,9 +188,9 @@ export default {
         active: false,
         checkPassword: '',
         image: '',
-        id: '',
         submit: {
           email: '',
+          captchaid: '',
           solution: '',
           username: '',
           password: '',
@@ -193,16 +206,30 @@ export default {
     computed: {
         validEmail() {
           return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.signupForm.submit.email)
-        },
-        async isExisted() { // 检查用户名或邮箱在数据库中是否已存在
-          const {data: result} = await this.$http.post('/register/isexisted', this.loginForm.submit)
-          return true
-        },
+        }
     },
     methods: {
         pushRouter(adress){
           if (adress != window.location.pathname){
             this.$router.push(adress)
+          }
+        },
+        showDropMenu() {
+          document.addEventListener('click', this.hideDropMenu)
+        },
+        hideDropMenu(e) {
+          this.toggleDropMenu = !this.toggleDropMenu
+          if(!this.toggleDropMenu){
+              document.removeEventListener('click', this.hideDropMenu)
+          }
+        },
+        async logout(){
+          this.username = ''
+          const {data: result} = await this.$http.get('/logout')
+          if(result.code == 200){
+            this.openNotification('🥳 退出成功')
+          }else{
+            this.openNotification('👎 退出失败')
           }
         },
         loadSignupForm(){
@@ -213,7 +240,7 @@ export default {
           const {data: result} = await this.$http.get('/captcha')
           if (result.code == 200){
             this.signupForm.image = 'data:image/png;base64,'+result.data
-            this.signupForm.id = result.id
+            this.signupForm.submit.captchaid = result.id
           }
         },
         async signin(){
@@ -231,14 +258,16 @@ export default {
             };
         },
         async signup(){
-          const {data: result2} = await this.$http.post('/register', this.signupForm.submit)
-            if (result2.code == 200){
+          const {data: result} = await this.$http.post('/register', this.signupForm.submit)
+            if (result.code == 200){
               this.openNotification('🥳 Congratulations～ Registration success!')
-            }else if (result2.code == 1000){
+            }else if (result.code == 1000){
               this.openNotification('用户名重复')
-            }else if (result2.code == 1001){
+            }else if (result.code == 1001){
               this.openNotification('邮箱重复')
-            }else{
+            }else if (result.code == 1002){
+              this.openNotification('验证码错误')
+            } else{
               this.openNotification('注册失败')
             };
         },
@@ -272,6 +301,47 @@ export default {
 }
 .authcode-form input{
  width: 100px;
+}
+.dropdown-divider{
+  display: block;
+  height: 0;
+  margin: 8px 0;
+  border-top: 1px solid #e1e4e8;
+}
+.menu__items {
+  background: #fff;
+  position: absolute;
+  right: 10px;
+  top: 44px;
+  z-index: 2;
+}
+
+ul {
+  width: 140px;
+  list-style-type: none;
+  box-sizing: border-box;
+  margin: 1px auto;
+  text-align: center;
+  padding-left: 0;
+  z-index: 2;
+  box-shadow: 1px 1px 7px gray;
+  padding-bottom: 8px;
+}
+ul button {
+  color: #24292E;
+  font-size: 14px;
+  line-height: 1.5;
+  display: block;
+  text-overflow: ellipsis;
+  padding: 4px 8px 4px 16px;
+  width: 100%;
+  max-width: 100%;
+  border: none;
+  background: #fff;
+}
+ul button:hover{
+  font-weight: 600;
+  background: #BDBEC0;
 }
 </style>
 

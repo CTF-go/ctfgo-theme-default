@@ -23,10 +23,10 @@
                     <vs-td>{{ (page-1)*max+i+1 }}</vs-td>
 
                     <vs-td>
-                        {{ tr.User }}
+                        {{ tr.username }}
                         <a href="https://www.baidu.com"><i class="fas fa-external-link-alt"></i></a>
                     </vs-td>
-                    <vs-td>{{ tr.Score }}</vs-td>
+                    <vs-td>{{ tr.score }}</vs-td>
                     <vs-td><a style="font-size:20px">🇨🇳</a></vs-td>
                 </vs-tr>
             </template>
@@ -51,8 +51,13 @@ export default {
         max: 2,
         users: [
             {
-                "User": "Bob",
-                "Score": 1000,
+                "username": "Bob",
+                "score": 1000,
+                /*"Affiliation": "X1cT34m",*/
+            },
+            {
+                "username": "Alice",
+                "score": 1000,
                 /*"Affiliation": "X1cT34m",*/
             }
         ],
