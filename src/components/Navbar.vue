@@ -51,7 +51,7 @@
                 <vs-input v-model="loginForm.submit.username" placeholder="Username or email address"></vs-input>
                 <vs-input v-model="loginForm.submit.password" placeholder="Password" type="password" ></vs-input>
                   <div class="flex">
-                      <vs-checkbox v-model="rememberme">Remember me</vs-checkbox>
+                      <vs-checkbox v-model="loginForm.submit.remember">Remember me</vs-checkbox>
                       <vs-button transparent :active="forgotForm.active == 1" @click="forgotForm.active =! forgotForm.active">
                           Forgot Password?
                       </vs-button>
@@ -176,10 +176,10 @@ export default {
       toggleDropMenu: false,
       admin: true,
       active: '/home',
-      rememberme: false,
       loginForm: {
         active: false,
         submit:{
+          remember: false,
           username: '',
           password: ''
         }
@@ -244,6 +244,7 @@ export default {
           }
         },
         async signin(){
+          console.log(this.loginForm)
             if (this.loginForm.submit.username=='' || this.loginForm.submit.password==''){
                 this.openNotification('👎 用户名和密码不能为空')
                 return
@@ -258,6 +259,22 @@ export default {
             };
         },
         async signup(){
+          if (this.signupForm.submit.email == ''){
+            this.openNotification('👎 邮箱不能为空')
+            return
+          }else if(this.signupForm.submit.username == ''){
+            this.openNotification('👎 用户名不能为空')
+            return
+          }else if(this.signupForm.submit.password == ''){
+            this.openNotification('👎 密码不能为空')
+            return
+          }else if(this.signupForm.checkPassword == ''){
+            this.openNotification('👎 请输入确认密码')
+            return
+          }else if(this.signupForm.submit.solution == ''){
+            this.openNotification('👎 验证码不能为空')
+            return
+          }
           const {data: result} = await this.$http.post('/register', this.signupForm.submit)
             if (result.code == 200){
               this.openNotification('🥳 Congratulations～ Registration success!')
