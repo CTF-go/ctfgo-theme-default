@@ -1,19 +1,21 @@
 <template>
     <vs-alert shadow>
         <template #title>
-            {{ title }}
+            {{ notice.title }}
         </template>
-            {{ message }}
-            <div class="created-time">{{ created_time }}</div>
+            {{ notice.content }}
+            <div class="created-time">{{ notice.created_at }}</div>
     </vs-alert>
 </template>
 
 <script>
 export default {
     props: {
-        title: {type: String, default: 'Hi, there'},
-        message: {type: String, default: 'This is a default message.'},
-        created_time: {type: String, default: '2006-01-02 15:04:05'}
+        notice:{
+            title: {type: String, default: 'Hi, there'},
+            content: {type: String, default: 'This is a default message.'},
+            created_at: {type: String, default: '2006-01-02 15:04:05'}
+        }
     }
 }
 </script>
