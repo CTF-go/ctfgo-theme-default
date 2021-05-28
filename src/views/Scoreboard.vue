@@ -23,7 +23,6 @@
 
                     <vs-td>
                         {{ tr.username }}
-                        <a href="https://www.baidu.com"><i class="fas fa-external-link-alt"></i></a>
                     </vs-td>
                     <vs-td>{{ tr.score }}</vs-td>
                 </vs-tr>
@@ -46,7 +45,6 @@ export default {
     return {
         page: 1,
         max: 2,
-        countryFlags,
         users: [
             {
                 "username": "Bob",
