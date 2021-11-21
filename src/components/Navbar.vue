@@ -11,9 +11,19 @@
         <vs-navbar-item @click="pushRouter('/scoreboard')" :active="active == '/scoreboard'" id="/scoreboard">
           Scoreboard
         </vs-navbar-item>
-        <vs-navbar-item @click="pushRouter('/challenges')" :active="active == '/challenges'" id="/challenges">
+        <vs-navbar-group>
           Challenges
-        </vs-navbar-item>
+          <template #items>
+            <vs-navbar-item 
+              :key="i" :data="category" v-for="(category, i) in challengeCategories"
+              @click="pushRouter('/challenges/'+category)"
+              :active="subActive == category" id="category"
+            >
+              {{ category.toUpperCase() }}
+            </vs-navbar-item>
+          </template>
+        </vs-navbar-group>
+
         <vs-navbar-item v-if="admin" @click="pushRouter('/dashboard')" :active="active == '/dashboard'" id="/dashboard">
           Dashboard
         </vs-navbar-item>
@@ -117,7 +127,7 @@
                     </vs-input>
                     <div style="width:300px;">
                         <div style="float:left; width: 160px;" >
-                            <vs-input style="width:160px;" v-model="signupForm.submit.solution" placeholder="Auth Code">
+                            <vs-input style="width:160px;" v-model="signupForm.submit.solution" placeholder="Captcha">
                             </vs-input>
                         </div>
                       <div class="authcode-img" style="margin-right:0; float:right; width:100px;"><img v-bind:src="signupForm.image" @click="getCaptchaID()" style="width:100px;height:50px;" alt="验证码图片"></div>
@@ -172,10 +182,12 @@ export default {
       MenuDropdown
     },
     data:() => ({
+      challengeCategories:['web', 'pwn', 'reverse', 'crypto', 'misc'],
       username: '',
       toggleDropMenu: false,
-      admin: true,
+      admin: false,
       active: '/home',
+      subActive: '',
       loginForm: {
         active: false,
         submit:{
@@ -226,6 +238,7 @@ export default {
         async logout(){
           this.username = ''
           const {data: result} = await this.$http.get('/logout')
+          console.log(result.code)
           if(result.code == 200){
             this.openNotification('🥳 退出成功')
           }else{
@@ -253,6 +266,7 @@ export default {
             if (result.code == 200){
                 this.openNotification('🥳 Success!', 'Hi, '+result.username+'. Welcome to CTFgo~')
                 this.username = result.username
+                this.admin = result.role
                 this.loginForm.active = false
             }else{
               this.openNotification('👎 Login failed!', 'Plese check your <strong>username</strong> or <strong>password</strong>.')
@@ -294,10 +308,15 @@ export default {
             title,
             text
           })
+        },
+        async isSignedIn() {
+          const {data: result} = await this.$http.get('/user/session');
+          console.log(result);
         }
     },
     created(){
-      this.active = window.location.pathname
+      this.active = window.location.pathname;
+      this.isSignedIn();
     }
 }
 </script>
