@@ -24,7 +24,7 @@ const routes = [
         component: () => import('../views/Scoreboard.vue')
       },
       {
-        path: 'challenges',
+        path: 'challenges/:category',
         component: () => import('../views/Challenges.vue')
       },
       {
