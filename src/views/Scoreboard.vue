@@ -61,8 +61,17 @@ export default {
             labels: ["8:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"],
             datasets: [
                 {
-                data: [0, 300, 330, 1330, 1825, 2635, 2950, 3660],
+                    data: [20, 300, 330, 1330, 1825, 2635, 2950, 3660],
                 },
+                {
+                    
+                    label: "Leonsec",
+                    borderCapStyle: "square",
+                    fill: false,
+                    backgroundColor: 'rgb(75, 192, 192)',
+                    borderColor: 'rgb(75, 192, 192)',
+                    data: [20, 30, 130, 1200, 1825, 3635, 3750, 3850],
+                }
             ],
         },
         options: {
