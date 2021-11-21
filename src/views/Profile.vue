@@ -1,12 +1,27 @@
 <template>
     <div class="profile">
         <h1>Profile</h1>
+        <a>token: {{token}}</a><br>
+        <a>country: {{country}}</a><br>
+        <a>score: {{score}}</a><br>
+        <a>username: {{username}}</a><br>
+        <a>email: {{email}}</a><br>
+
     </div>
 </template>
 
 <script>
 export default {
     name: 'Profile',
+    data:() => ({
+        token: '24be9ccff4467de283b9c58fb3127970',
+        country: "cn",
+        id: 2,
+        score: 100,
+        username: 'admin',
+        email: 'admin@qq.com',
+        score: 100,
+    }),
 }
 </script>
 <style scoped>
