@@ -17,7 +17,7 @@ library.add(faUserSecret, faSpinner, faAlignLeft)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = 'http://172.20.10.8:8080/v1/' // 'http://127.0.0.1:8081/v1/'
+axios.defaults.baseURL = 'https://ctfgo.top/v1/' // 'http://127.0.0.1:8081/v1/'
 Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
