@@ -1,7 +1,7 @@
 <template>
     <div class="center examplex">
       <vs-navbar color="#24292e" text-white square center-collapsed v-model="active">
-        <template #left><img src="../assets/logo.png" alt=""></template>
+        <template #left><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAAAyCAMAAAAuj2TTAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAJnUExURQAAAP///////////////////////////////////////////////////////////////+T///b8//////////////////////n///P7/P///////////////////////////////////////////3fU5f////////////////////////////////////////b7//////////////////////////////////////////////////////////////////////////////////////////f//////////////////////////////////////////////////////////////////////////9Xs/G/O52vR6P///////////////////////////////////////////////////////////////////////////////////////////////////6bg6nPN5rbo8P///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////2az/3PQ5/L7/HLT5O75/Oz4/Pj8/f////////////////////////////////////////////////n8/fv9//X8/WXM56Lj71PH5/b8/fv9/cDq9PL5/Pb7/W/R5NPv95zh6+r4+/D5/G3a2q7j8tfx+dbx/83r9dvz+fP7/P39//H6/OH1+vz9/9/1+vT7/PP8/Pf8/f///3ZCd6UAAADMdFJOUwDC3fdJA+RoadPh9gT+ltIQAg/r51TK4g3gin6TqeqBGjQSDgEevkSHYC8jrGP9cgfzzHH7CWoGPJ7Rz3xWORubl0tI1donBacfE+lnQfDXTsPBHbUqZM7c3w0QIbkuZbYlWYCkFUM/O3jYHqD0+nk+Fsi6+O4MHxDmpVwYLFCLka4pNrSrbjNbde2MbMax4wtduyFNLaE4WPEDIN8dzMzOX4aPCoTHIPK97DB229vLIB8gz85ixuQnhxqi/gdSvRMah93d0MzczNjP0P4rTNsAAAZgSURBVGje7VkJVxNJEB5ussYAIZAsiFwbEAFBOSM3IiAoKyJHcFFUBESDeCAgKK4HeIIHeKyy4IEXuB7r3vfq3vOjNpnqSaaneyaT3feMeY/v+Z501Vc1XXR3VXXDMAtYwDuF+oJIU2t4V1NXeKsp+sxRThaWHSCJwOwsjlOYHUgiO8k9QdwPMzWxOHTWUC6xsqjgbBupulB3hLH1eDU5k14tw/TIxpHCGasfUZXH3bCljlBnUm9VlcgGcgF2Fl255m2H4Rdh/7Z5bDjjTsGZwJ1teSxbYlO2qXis/hA4A6vtoqB1nIOdoKj1EqL21AdvOY7ctSiKoPxRgXh7apaIGAC0/YSHIE6e4OZMlYbC2LTRGfMBx/Mi5FfBwTb3xqGBWTy57JSZDEwyqcLOWqF1axxRMLuDVc6pyzhmZhah0HOKMbfGgXLSNSXcAY4aRcivK8tRkwVn7y7bfSOZG8RZURVDcIraU/OXRUSubw92MY5omMMSJdw1wD1JKFIgl8ka+xab+cTYupxhMixWsGE4p+NeYyZPepSywZU4ClxYD6aW46oIeRU4SZMxXa/C6ksMw004VJiec0aCRFWohPRz+LnRODXVd2vK2Gc0Gvtu9RlvfW2TrwOLA4riKAdyAaGIkDo6PCZUoil+vI/7z1cYqp6sp0fEjn6kFN1vbIoy7sdD8YoCOc2Rqwm5ehGniJayCylGn1RpRpJGTBb7FLoEJWsTiN7TJHUUHjvvQ+8MfmjRr3369Olnb/540+TtbbZBv+mwVZEP9GOK4hgCcrZEGbLsD/FzQO04q8llqCnrgXFMHh+IY0F2wNHwTvJDdQm1fS34lz4JoU8NbSyF9Rh+rzfJrqOXUywq8xdgpf0Yx8IK+DtmvSdTvCCw0ViN2hEZSMaVTW0VsPcoIu+SOtGBtG4x8xLSLl8BTYNw93YBp1SUOQOEXwMzHT9O1zZrm5vjDVqDobn58BYr+rf0B/f3/2xbo0RWoixQsYQj+/gRilBaIKlIqYX1uEgpR2Z+2ICbcAiGVStDwy+keu+aCseCnFAUhyFT4kRfpvnv5bUHoMKkCy1GgXODvwfBMIKWIU+jpPvlV7ffv23Fa+u/16//anw18/nMq3/+nvntV9vmBW64sgW5B/ktXaLaJ6zxFaA0GSnvwjfKMYtTkJ/4oY6yZswgGA6iQy57HTAJL0bOEL+YI0cSijvgpYhqhVqXfEx4AoRheMu6C7e8Ahs5XcHUQiDZsMsVBXIcMlMFoagWbgExmmity0HshKCGeifOecjKlaYXzz+y4eXLF784dpbFoCSOYCDvIxQNcokvDJQNmPAoXrs2c6OVogLRIvV7s+2znxxn8XvrnktF7xwhyq8sFqmUJZH4oPJZ8OkkcMImvJSJelZfkO6gev125tn0788+nf5zenr6O+t4N0r4StrlOODullqQIrlrGH5LQa8U/F0U9RaJ+IG00Mq6/UyIxmdZ3KXzGmJRE4qlcguyjZJX1TpsQZjHwKnDDOGNLDRdWT5FTQC7yjk1C8rsrNRUt9PNZkF7TyhDveEZfuwNY+x2OgayrQpvIjH8gYlwSoX1X0xuwnOyvVoE0ePW1YofIP2J1Jm1WdTAOMVm++WgHn/jEk84BF4Ri6WK+kmJD/BN2DDfrszz3XmGKB8ILh6JcI/sTlR+OaxzZLHWjI6HhpwcQ8zcxrOVA530DVRHeIB9ked0zWuze+ZyG65ZCxeUVZ8cOweVfr7SbkhB72vlrlxzS7H26KZOVwP9lLiywO+olbDfgJdoEsPiFkxjFp+aOP6O7m2KjG5DbTF73sWHh5N5tIZPT59vLmF+xemDexTmOOh6/SHuhyHSuxBjsa6/BV1QkX7EybQLvxnYgVqDWTn/SXb/Pqdu8L1wCkYZfYD3zabC//as1THbYu5GTg7pL+5NyxX1BXGrwm0YJB9GVtvkB2Lk/XdmLKms1OybsD0XT9Kz9cTetZDfa8I1Yf/rsXJosrO9vSe2fBetW1ZLWbn+0u4FSZKiKYpNTOw8YWA8Axvl+hkPwtVuiSuNh2HunCsX0ncI+1OFDyc587CvquM9LpAo9lxlYG5dFsOk7/E9P47+ZrfO83YSzHzxE7N5qb1IJFR5XBz3uylvRGkeeLS1bf6iMPLmgxmPhDo3o/ixarz3Ua9/2ZWS9VuZBSzg3cK/CBvRoCa/h5YAAAAASUVORK5CYII=" alt="LOGO"></template>
         <vs-navbar-item @click="pushRouter('/home')" :active="active == '/home'" id="/home">
           Home
         </vs-navbar-item>
@@ -11,13 +11,13 @@
         <vs-navbar-item @click="pushRouter('/scoreboard')" :active="active == '/scoreboard'" id="/scoreboard">
           Scoreboard
         </vs-navbar-item>
-        <vs-navbar-group :active="active == '/challenges'" id="/challenges">
+        <vs-navbar-group>
           Challenges
           <template #items>
             <vs-navbar-item 
-              :key="i" :data="category" v-for="(category, i) in challengeCategories"
+              :key="i" :data="category" v-for="(category, i) in categories"
               @click="pushRouter('/challenges/'+category)"
-              :active="subActive == category" id=category
+              :active="active == category" v-bind:id="category"
             >
               {{ category.toUpperCase() }}
             </vs-navbar-item>
@@ -26,11 +26,14 @@
 
         <vs-navbar-item v-if="admin" @click="pushRouter('/dashboard')" :active="active == '/dashboard'" id="/dashboard">
           Dashboard
+          
         </vs-navbar-item>
 
         <template #right>
+        
             <div v-if="username==undefined || username==''">
                 <vs-button @click="loginForm.active =! loginForm.active" color="#fff" border>Login</vs-button>
+              
             </div>
 
             <vs-button v-else @click="showDropMenu()" color="#fff" flat >Hi, {{ username }}</vs-button>
@@ -148,7 +151,7 @@
                 <vs-dialog blur v-model="forgotForm.active">
                   <template #header>
                       <h4 class="not-margin">
-                          Find Password
+                          Forgot Password
                       </h4>
                   </template>
                   <div><h2>爬，密码都能忘？💩</h2></div>
@@ -182,37 +185,24 @@ export default {
       MenuDropdown
     },
     data:() => ({
-      challengeCategories:['web', 'pwn', 'reverse', 'crypto', 'misc'],
+      categories: [],
       username: '',
       toggleDropMenu: false,
       admin: false,
       active: '/home',
-      subActive: '',
       loginForm: {
         active: false,
-        submit:{
-          remember: false,
-          username: '',
-          password: ''
-        }
+        submit:{ remember: false, username: '', password: ''}
       },
       signupForm: {
         active: false,
         checkPassword: '',
         image: '',
-        submit: {
-          email: '',
-          captchaid: '',
-          solution: '',
-          username: '',
-          password: '',
-        }
+        submit: { email: '', captchaid: '', solution: '', username: '', password: '' }
       },
       forgotForm: {
         active: false,
-        usermail: '',
-        authcode: '',
-        mailcode: ''
+        submit: { usermail: '', authcode: '', mailcode: '' }
       }
     }),
     computed: {
@@ -222,6 +212,11 @@ export default {
     },
     methods: {
         pushRouter(adress){
+          if (adress.indexOf('challenges') != -1){
+            this.active = '/challenges';
+            console.log(adress.indexOf('challenges'), this.active);
+          }
+          console.log(adress, this.active);
           if (adress != window.location.pathname){
             this.$router.push(adress)
           }
@@ -257,7 +252,6 @@ export default {
           }
         },
         async signin(){
-          console.log(this.loginForm)
             if (this.loginForm.submit.username=='' || this.loginForm.submit.password==''){
                 this.openNotification('👎 用户名和密码不能为空')
                 return
@@ -270,6 +264,7 @@ export default {
                 this.username = result.username
                 this.admin = result.role
                 this.loginForm.active = false
+                this.getCategories();
             }else{
               this.openNotification('👎 Login failed!', 'Plese check your <strong>username</strong> or <strong>password</strong>.')
             };
@@ -306,19 +301,28 @@ export default {
         },
         openNotification(title, text) {
           const noti = this.$vs.notification({
-            position: 'top-center',
-            title,
-            text
+            position: 'top-center', title, text
           })
         },
         async isSignedIn() {
           const {data: result} = await this.$http.get('/user/session');
+          if (result.code == 200){
+            this.username = result.data.username;
+            this.admin = result.data.role;
+          }
+        },
+        async getCategories() {
+          const {data: result} = await this.$http.get('/user/categories');
           console.log(result);
-        }
+          if (result.code == 200){this.categories = result.data;}
+        },
     },
     created(){
       this.active = window.location.pathname;
       this.isSignedIn();
+      if (this.username != ''){
+        this.getCategories();
+      }
     }
 }
 </script>
