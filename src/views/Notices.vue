@@ -6,7 +6,7 @@
                 <NoticeCard :notice="notice"/>
             </div>
             <template>
-                <vs-pagination v-model="page" :length="$vs.getLength(notices, max)" />
+                <vs-pagination v-model="page" :length="Math.max(notices.length/10, 1)" />
             </template>
         </div>
     </div>
@@ -47,14 +47,14 @@ export default {
         async getNotices(){
             const {data: result} = await this.$http.get('/notice/all')
             if(result.data != null){
-                this.notices = result.data
-                this.notices.reverse()
-                for (let i=0; i<this.notices.length; i++){
+                this.notices = result.data;
+                this.notices.reverse();
+                console.log("test");
+                console.log(this.notices.length);
+                for (let i=0; i < this.notices.length; i++){
                     this.notices[i].created_at = this.timestampToTime(this.notices[i].created_at);
                 }
             }
-          this.notices = result.data
-          console.log(result)
       }
     },
     created(){
