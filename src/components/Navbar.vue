@@ -11,13 +11,13 @@
         <vs-navbar-item @click="pushRouter('/scoreboard')" :active="active == '/scoreboard'" id="/scoreboard">
           Scoreboard
         </vs-navbar-item>
-        <vs-navbar-group>
+        <vs-navbar-group :active="active == '/challenges'" id="/challenges">
           Challenges
           <template #items>
             <vs-navbar-item 
               :key="i" :data="category" v-for="(category, i) in challengeCategories"
               @click="pushRouter('/challenges/'+category)"
-              :active="subActive == category" id="category"
+              :active="subActive == category" id=category
             >
               {{ category.toUpperCase() }}
             </vs-navbar-item>
@@ -263,7 +263,9 @@ export default {
                 return
             }
             const {data: result} = await this.$http.post('/login', this.loginForm.submit)
+
             if (result.code == 200){
+                console.log(result);
                 this.openNotification('🥳 Success!', 'Hi, '+result.username+'. Welcome to CTFgo~')
                 this.username = result.username
                 this.admin = result.role
