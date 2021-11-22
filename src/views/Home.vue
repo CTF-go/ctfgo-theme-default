@@ -37,7 +37,7 @@ export default {
     padding-left: 20px;
     height: 40px;
     background: #eef2f5;
-    z-index: 10000;
+    z-index: 10;
     display: flex;
     align-items: center;
     overflow: hidden;
