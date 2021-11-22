@@ -1,6 +1,6 @@
 <template>
     <div class="challenges">
-        <h1>{{ $route.params.category.toUpperCase() }}</h1>
+        <h1>{{ category }}</h1>
         <div class="center">
             <ChallengeCard />
             <ChallengeCard />
@@ -14,7 +14,10 @@
 import ChallengeCard from '../components/ChallengeCard'
 
 export default {
-    components:{ ChallengeCard }
+    components:{ ChallengeCard },
+    data:() => ({
+        category: $route.params.category.toUpperCase()
+    })
 }
 </script>
 
