@@ -185,8 +185,9 @@ export default {
       MenuDropdown
     },
     data:() => ({
-      categories: [],
+      categories: ['please login'],
       username: '',
+      isStarted: false,
       toggleDropMenu: false,
       admin: false,
       active: '/home',
@@ -212,10 +213,6 @@ export default {
     },
     methods: {
         pushRouter(adress){
-          if (adress.indexOf('challenges') != -1){
-            this.active = '/challenges';
-            console.log(adress.indexOf('challenges'), this.active);
-          }
           console.log(adress, this.active);
           if (adress != window.location.pathname){
             this.$router.push(adress)
