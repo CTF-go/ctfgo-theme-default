@@ -5,7 +5,6 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import './plugins/vuesax.js'
-import "./assets/flags.js" // countrys flags
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUserSecret, faSpinner, faAlignLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -15,9 +14,8 @@ dom.watch()
 library.add(faUserSecret, faSpinner, faAlignLeft)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = 'https://ctfgo.top/v1/' // 'http://127.0.0.1:8081/v1/'
+axios.defaults.baseURL = 'https://ctfgo.top/v1/'
 Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
