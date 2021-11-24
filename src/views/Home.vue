@@ -1,20 +1,26 @@
 <template>
   <div class="home">
-    <div class="header-notification">
+    <!-- <div class="header-notification">
       <p>test</p>
-    </div>
+    </div> -->
 
     <div class="logo">
-      <img src="../assets/ctfgo-logo-long.png" alt="Logo of CTFgo" />
+      <h1> 
+        <vue-typer text='Welcome to' :erase-on-complete='true' type-delay='100' :repeat='0' pre-erase-delay='1000' erase-delay='100'></vue-typer>
+        <vue-typer text='NCTF 2021' :repeat='0' pre-type-delay='2500' type-delay='180'></vue-typer>
+      </h1>
+      <!-- <img src="../assets/ctfgo-logo-long.png" alt="Logo of CTFgo" /> -->
     </div>
   </div>
 </template>
 <script>
+import { VueTyper } from 'vue-typer'
 export default {
     name: 'Home',
+    components: {VueTyper},
     data:() => ({
-        team: true,
-    })
+      team: true,
+    }),
 }
 </script>
 
@@ -30,6 +36,19 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.home .logo h1 {
+  width: 700px;
+  
+  max-width: 90%;
+  font-size: 100px;
+  position: absolute;
+  text-align: center;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .header-notification {
     top: 45px;
     width: 100%;
