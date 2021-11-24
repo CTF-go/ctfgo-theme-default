@@ -6,29 +6,26 @@
     </div>
     <div class="users">
         <vs-table>
+            <template #header>
+                <vs-input v-model="search" border placeholder="Search" />
+            </template>
+
             <template #thead>
                 <vs-tr>
-                    <vs-th>Ranking</vs-th>
-                    <vs-th>Username</vs-th>
+                    <vs-th sort @click="users = $vs.sortData($event, users, 'ranking')">Ranking</vs-th>
+                    <vs-th>Team</vs-th>
                     <vs-th>Score</vs-th>
                 </vs-tr>
             </template>
             <template #tbody>
-                <vs-tr
-                    :key="i"
-                    v-for="(tr, i) in $vs.getPage(users, page, max)"
-                    :data="tr"
-                >
-                    <vs-td>{{ (page-1)*max+i+1 }}</vs-td>
-
-                    <vs-td>
-                        {{ tr.username }}
-                    </vs-td>
-                    <vs-td>{{ tr.score }}</vs-td>
+                <vs-tr :key="i" :data="tr" v-for="(tr, i) in $vs.getPage($vs.getSearch(users, search), page, max)" >
+                    <vs-td> {{ tr.ranking }} </vs-td>
+                    <vs-td> {{ tr.username }} </vs-td>
+                    <vs-td> {{ tr.score }} </vs-td>
                 </vs-tr>
             </template>
             <template #footer>
-                <vs-pagination v-model="page" :length="$vs.getLength(users, max)" />
+                <vs-pagination v-model="page" :length="$vs.getLength($vs.getSearch(users, search), max)" />
             </template>
         </vs-table>
     </div>
@@ -43,15 +40,18 @@ export default {
   },
   data() {
     return {
+        search: '',
         page: 1,
-        max: 2,
+        max: 10,
         users: [
             {
+                "ranking": 1,
                 "username": "Bob",
-                "score": 1000,
+                "score": 1002,
                 /*"Affiliation": "X1cT34m",*/
             },
             {
+                "ranking": 2,
                 "username": "Alice",
                 "score": 1000,
                 /*"Affiliation": "X1cT34m",*/
@@ -82,8 +82,13 @@ export default {
   },
   methods:{
       async getUsersData(){
-          const {data: result} = await this.$http.get('/scores/all')
-          this.users = result['data']
+          const {data: result} = await this.$http.get('/scores/all');
+          this.users = result['data'];
+          for (var i = 0; i < this.users.length; i++){
+              if (i == 0) {this.users[i].ranking = 1;}
+              else if (this.users[i].score == this.users[i-1].score) {this.users[i].ranking = this.users[i-1].ranking;}
+              else {this.users[i].ranking = this.users[i-1].ranking + 1;}
+          }
       }
   },
     mounted:function(){
