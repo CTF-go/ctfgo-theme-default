@@ -1,33 +1,81 @@
 <template>
     <div class="challengecard">
-        <vs-button flat
-            :active="active != active"
-            @click="active =! active">
+        <vs-button flat :active="isSolved == true" @click="active =! active">
             <div class="challenge">
-              <h2>{{ name }}</h2>
-              <p>{{ score }}</p>
+                <h2 v-if="name.length>30">
+                    <marquee><span>{{ name }}</span></marquee>
+                </h2>
+                <h2 v-else> {{ name }} </h2>
+                <p>{{ score }}</p>
             </div>
         </vs-button>
-        <vs-dialog width="300px" not-center v-model="active">
+
+        <vs-dialog width="500px" scroll auto-width v-model="active">
+
             <template #header>
-            <h2 class="not-margin">
-                {{ name }}
-            </h2>
-            <p class="not-margin">{{ details }}</p>           
+                <h3 class="not-margin"> {{ name }} </h3>   
+                <vs-button v-if="hints!=null && hints.length > 0" @click="active3=!active3" shadow transparent>
+                    Hint
+                </vs-button>
+                
             </template>
             <div class="con-content">
-            <vs-input v-model="inputflag" placeholder="flag{******}"></vs-input>
+                <p class="not-margin" v-html="description"></p>
+                <br>
+                <vs-row>
+                    <vs-col :key=i :data=j v-for="(i,j) in attachment" vs-type="flex" vs-justify="center" vs-align="center" w="2">
+                         <a style="text-decoration:none" :href="i" target="_blank"> 
+                         <vs-button style="display:block;margin:0 auto" flat primary> Attachment {{j+1}} </vs-button>
+                        </a>
+                    </vs-col>
+                </vs-row>
+                <vs-input v-model="flag" placeholder="NCTF{.*}"></vs-input>
             </div>
 
             <template #footer>
-            <div class="con-footer">
-                <vs-button @click="active=false" transparent>
-                Submit
-                </vs-button>
-                <vs-button @click="active=false" dark transparent>
-                Cancel
-                </vs-button>
+            <div class="con-form" >
+                <div class="flex">
+                    <vs-button @click="active2=!active2" shadow transparent>
+                        Solves: {{ solverCount }}
+                    </vs-button>
+                    <vs-button v-if="!isSolved" @click="active=false" transparent>
+                        Submit
+                    </vs-button>
+                    <vs-button v-else @click="active=false" disabled transparent>
+                        Submit
+                    </vs-button>
+                </div>
             </div>
+             
+                <div class="con-footer">
+                    <vs-dialog scroll auto-width overflow-hidden v-model="active2">
+                        <div class="con-content center">
+                            <vs-table>
+                                <template #thead>
+                                    <vs-tr>
+                                        <vs-th> Number </vs-th>
+                                        <vs-th> Name </vs-th>
+                                        <vs-th> Time </vs-th> 
+                                    </vs-tr>
+                                </template>
+                                <template #tbody>
+                                    <vs-tr :key="i" :data="tr" v-for="(tr, i) in solves" >
+                                        <vs-td> {{ i+1 }} </vs-td>
+                                        <vs-td> {{ tr.username }} </vs-td>
+                                        <vs-td> {{ tr.time }} </vs-td>
+                                    </vs-tr>
+                                </template>
+                            </vs-table>
+                        </div>
+                    </vs-dialog>
+                    
+                    <vs-dialog scroll auto-width overflow-hidden v-model="active3">
+                        <div class="con-content">
+                            <a :key="ii" :data="jj" v-for="(ii,jj) in hints" ><br> Hint {{jj+1}}: {{ ii }} <br> </a>
+                        </div>
+                    </vs-dialog>
+
+                </div>
             </template>
         </vs-dialog>
     </div>
@@ -36,28 +84,78 @@
 <script>
 export default {
     props: {
+        id: {type: Number, default: 1},
         name: {type: String, default: 'Challenge Name'},
-        score: {type: String, default: '1000'},
-        details: {type:String, default: 'More information of a challenge...'},
-        apiurl: {type: String, default: '/challenges/submit/1'}
+        score: {type: Number, default: 1000},
+        description: {type:String, default: 'More information of a challenge...'},
+        isSolved: {type: Number, default: 0},
+        solverCount: {type: Number, default: 0},
+        attachment: [],
+        hints: []
     },
     data: function (){
         return {
             active: false,
-            inputflag: ''
+            active2: false,
+            active3: false,
+            search: '',
+            flag: '',
+            solves: [
+                { username: 'test1', time: '2021-11-23 16:34', submitted_at: 1622649485 },
+            ]
         }
+    },
+    methods: {
+        timestampToTime(timestamp){
+            var d = new Date();
+            var localOffset = -d.getTimezoneOffset()*60; // 获取当前时区与GMT的时间差，单位由分钟转换成秒
+            var timeZone = localOffset>0 ? ' UTC+':' UTC'
+            timeZone += localOffset/3600;
+            timestamp += localOffset;
+            var date = new Date(timestamp * 1000);
+            var Y = date.getFullYear() + '-';
+            var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+            var D = date.getDate() + ' ';
+            var h = date.getHours() + ':';
+            var m = date.getMinutes() + ':';
+            var s = date.getSeconds();
+            return Y + M + D + h + m + s + timeZone;
+	    },
+        async submitFlag(){
+            const {data: result} = await this.$http.post('/user/submitflag', {"cid": this.id, "flag": this.flag});
+            if (result.code == 200){
+                this.openNotification('🥳 Congratulations～ Correct flag!');
+            }else{
+                this.openNotification('🥳 Congratulations～ Correct flag!');
+            }
+        },
+        async getSolves(){
+            const {data: result} = await this.$http.get('/user/solves/cid/'+this.id);
+            if (result.code == 200){
+                this.solves = result.data;
+                for (var i = 0; i < this.solves.length; i++) {
+                    this.solves.time = this.timestampToTime(this.solves.submitted_at);
+                }
+            }
+        },
+        openNotification(title, text) {
+          const noti = this.$vs.notification({
+            position: 'top-center', title, text
+          })
+        },
     }
+
 }
 </script>
 
 
 <style scoped>
 .challengecard button{
-  width: 180px;
-  height: 100px;
+  width: 90%;
+  height: 140px;
 }
 .challenge h2{
-  font-size: 16px;
+  font-size: 20px;
 }
 </style>
 
