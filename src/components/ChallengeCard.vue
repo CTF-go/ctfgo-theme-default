@@ -10,7 +10,7 @@
             </div>
         </vs-button>
 
-        <vs-dialog width="500px" scroll auto-width v-model="active">
+        <vs-dialog width="500px" scroll v-model="active">
 
             <template #header>
                 <h3 class="not-margin"> {{ name }} </h3>   
@@ -23,7 +23,7 @@
                 <p class="not-margin" v-html="description"></p>
                 <br>
                 <vs-row>
-                    <vs-col :key=i :data=j v-for="(i,j) in attachment" vs-type="flex" vs-justify="center" vs-align="center" w="2">
+                    <vs-col :key=i :data=j v-for="(i,j) in attachment" vs-type="flex" vs-justify="center" vs-align="center" w="3">
                          <a style="text-decoration:none" :href="i" target="_blank"> 
                          <vs-button style="display:block;margin:0 auto" flat primary> Attachment {{j+1}} </vs-button>
                         </a>
@@ -125,8 +125,8 @@ export default {
             const {data: result} = await this.$http.post('/user/submitflag', {"cid": this.id, "flag": this.flag});
             if (result.code == 200){
                 this.openNotification('🥳 Congratulations～ Correct flag!');
-            }else{
-                this.openNotification('🥳 Congratulations～ Correct flag!');
+            }else if(result.code == 400){
+                this.openNotification('🥳');
             }
         },
         async getSolves(){
