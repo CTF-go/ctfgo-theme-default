@@ -306,6 +306,7 @@ export default {
           if (result.code == 200){
             this.username = result.data.username;
             this.admin = result.data.role;
+            this.getCategories();
           }
         },
         async getCategories() {
@@ -316,10 +317,10 @@ export default {
     },
     created(){
       this.active = window.location.pathname;
-      this.isSignedIn();
-      if (this.username != ''){
-        this.getCategories();
+      if (this.active == "/dashboard" && !this.admin){
+        this.pushRouter('/home')
       }
+      this.isSignedIn();
     }
 }
 </script>
