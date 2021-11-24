@@ -3,7 +3,7 @@
         <template #title>
             {{ notice.title }}
         </template>
-            {{ notice.content }}
+            <p v-html="notice.content"></p>
             <div class="created-time">{{ notice.created_at }}</div>
     </vs-alert>
 </template>
