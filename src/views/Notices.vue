@@ -2,11 +2,11 @@
     <div class="notices">
         <h1>Notices</h1>
         <div class="notices-box">
-            <div :key="i" :data="notice" v-for="(notice, i) in notices">
-                <NoticeCard :notice="notice"/>
+            <div :key="i" :data="notice" v-for="(notice, i) in Math.min(5, notices.length-(page-1)*5)">
+                <NoticeCard :notice="notices[(page-1)*5 + i]"/>
             </div>
             <template>
-                <vs-pagination v-model="page" :length="Math.max(notices.length/10, 1)" />
+                <vs-pagination v-model="page" :length="Math.max(Math.ceil(notices.length/5), 1)" />
             </template>
         </div>
     </div>
@@ -18,7 +18,6 @@ import NoticeCard from '../components/NoticeCard'
 export default {
     data:() => ({
         page: 1,
-        max: 2,
         notices: [
             {
                 title: "Hi, there",
@@ -46,11 +45,9 @@ export default {
 	    },
         async getNotices(){
             const {data: result} = await this.$http.get('/notice/all')
-            if(result.data != null){
+            if(result.code == 200){
                 this.notices = result.data;
                 this.notices.reverse();
-                console.log("test");
-                console.log(this.notices.length);
                 for (let i=0; i < this.notices.length; i++){
                     this.notices[i].created_at = this.timestampToTime(this.notices[i].created_at);
                 }
