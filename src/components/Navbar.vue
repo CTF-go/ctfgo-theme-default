@@ -11,7 +11,8 @@
         <vs-navbar-item @click="pushRouter('/scoreboard')" :active="active == '/scoreboard'" id="/scoreboard">
           Scoreboard
         </vs-navbar-item>
-        <vs-navbar-group>
+
+        <vs-navbar-group v-if="username">
           Challenges
           <template #items>
             <vs-navbar-item 
@@ -26,7 +27,6 @@
 
         <vs-navbar-item v-if="admin" @click="pushRouter('/dashboard')" :active="active == '/dashboard'" id="/dashboard">
           Dashboard
-          
         </vs-navbar-item>
 
         <template #right>
@@ -185,8 +185,8 @@ export default {
       MenuDropdown
     },
     data:() => ({
-      categories: ['please login'],
-      username: '',
+      categories: ["12", "1222"],
+      username: '123',
       isStarted: false,
       toggleDropMenu: false,
       admin: false,
@@ -213,9 +213,8 @@ export default {
     },
     methods: {
         pushRouter(adress){
-          console.log(adress, this.active);
           if (adress != window.location.pathname){
-            this.$router.push(adress)
+            this.$router.push(adress);
           }
         },
         showDropMenu() {
@@ -234,7 +233,7 @@ export default {
           if(result.code == 200){
             this.openNotification('🥳 退出成功')
           }else{
-            this.openNotification('👎 退出失败')
+            this.openNotification('😰 退出失败')
           }
         },
         loadSignupForm(){
@@ -250,7 +249,7 @@ export default {
         },
         async signin(){
             if (this.loginForm.submit.username=='' || this.loginForm.submit.password==''){
-                this.openNotification('👎 用户名和密码不能为空')
+                this.openNotification('😨 用户名和密码不能为空')
                 return
             }
             const {data: result} = await this.$http.post('/login', this.loginForm.submit)
@@ -263,24 +262,24 @@ export default {
                 this.loginForm.active = false
                 this.getCategories();
             }else{
-              this.openNotification('👎 Login failed!', 'Plese check your <strong>username</strong> or <strong>password</strong>.')
+              this.openNotification('😵 Login failed!', 'Plese check your <strong>username</strong> or <strong>password</strong>.')
             };
         },
         async signup(){
           if (this.signupForm.submit.email == ''){
-            this.openNotification('👎 邮箱不能为空')
+            this.openNotification('👿 邮箱不能为空')
             return
           }else if(this.signupForm.submit.username == ''){
-            this.openNotification('👎 用户名不能为空')
+            this.openNotification('👿 用户名不能为空')
             return
           }else if(this.signupForm.submit.password == ''){
-            this.openNotification('👎 密码不能为空')
+            this.openNotification('👿 密码不能为空')
             return
           }else if(this.signupForm.checkPassword == ''){
-            this.openNotification('👎 请输入确认密码')
+            this.openNotification('👿 请输入确认密码')
             return
           }else if(this.signupForm.submit.solution == ''){
-            this.openNotification('👎 验证码不能为空')
+            this.openNotification('👿 验证码不能为空')
             return
           }
           const {data: result} = await this.$http.post('/register', this.signupForm.submit)
@@ -315,9 +314,17 @@ export default {
           if (result.code == 200){this.categories = result.data;}
         },
     },
+    mounted(){
+      this.active = window.location.pathname;
+      this.isSignedIn();
+    },
     created(){
       this.active = window.location.pathname;
       if (this.active == "/dashboard" && !this.admin){
+        this.pushRouter('/home')
+      }
+      console.log(this.active);
+      if ((this.active.indexOf("/challenges") != -1) && !this.username ){
         this.pushRouter('/home')
       }
       this.isSignedIn();
