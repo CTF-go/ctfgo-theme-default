@@ -35,7 +35,7 @@
             <template #footer>
             <div class="con-form" >
                 <div class="flex">
-                    <vs-button @click="active2=!active2" shadow transparent>
+                    <vs-button @click="getSolves" shadow transparent>
                         Solves: {{ solverCount }}
                     </vs-button>
                     <vs-button v-if="!isSolved" @click="active=false" transparent>
@@ -108,7 +108,7 @@ export default {
     methods: {
         timestampToTime(timestamp){
             var d = new Date();
-            var localOffset = -d.getTimezoneOffset()*60; // 获取当前时区与GMT的时间差，单位由分钟转换成秒
+            var localOffset = -d.getTimezoneOffset()*60;
             var timeZone = localOffset>0 ? ' UTC+':' UTC'
             timeZone += localOffset/3600;
             timestamp += localOffset;
@@ -126,10 +126,11 @@ export default {
             if (result.code == 200){
                 this.openNotification('🥳 Congratulations～ Correct flag!');
             }else if(result.code == 400){
-                this.openNotification('🥳');
+                this.openNotification('😅');
             }
         },
         async getSolves(){
+            this.active2 = true;
             const {data: result} = await this.$http.get('/user/solves/cid/'+this.id);
             if (result.code == 200){
                 this.solves = result.data;
