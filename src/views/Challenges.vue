@@ -6,6 +6,7 @@
                 <vs-col vs-type="flex" vs-justify="center" vs-align="center" w="2"></vs-col>
                 <vs-col :key="index" v-for="col,index in Math.min(4, challenges.length-(row-1)*4)" vs-type="flex" vs-justify="center" vs-align="center" w="2">
                     <ChallengeCard 
+                        @reloadChallenges="getChallenges"
                         :id="challenges[4*(row-1)+col-1].id"
                         :name="challenges[4*(row-1)+col-1].name"
                         :score="challenges[4*(row-1)+col-1].score"
@@ -28,63 +29,19 @@ import ChallengeCard from '../components/ChallengeCard'
 export default {
     components:{ ChallengeCard },
     data:() => ({
-        category: 'None',
+        category: null,
         challenges: [
             {
                 id: 1,
-                name: 'very very very long challenge name test',
+                name: 'challenge name',
                 score: 500,
-                description: 'long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>long<br>',
-                is_solved:1,
+                description: 'description',
+                is_solved: false,
                 solver_count: 1,
                 attachment: [
-                    "https://baidu.com",
-                    "http://file.com",
                     "https://baidu.com"
                 ],
-                hints:["there is hint1", "there is hint2",]
-            },
-            {
-                id: 2,
-                name: 'image in description test',
-                score: 300,
-                is_solved:0,
-                description: '',
-                solver_count: 0,
-                attachment: [
-                    "https://baidu.com",
-                    "http://file.com",
-                    "https://baidu.com",
-                    "https://baidu.com",
-                ],
-            },
-            {
-                id: 2,
-                name: 'image in description test',
-                score: 300,
-                description: '<img src="https://www.google.com.hk/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="img">',
-                solver_count: 0
-            },
-            {
-                id: 2,
-                name: 'image in description test',
-                score: 300,
-                description: '<img src="https://www.google.com.hk/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="img">',
-                solver_count: 0
-            },
-            {
-                id: 2,
-                name: 'image in description test',
-                score: 300,
-                description: '<img src="https://www.google.com.hk/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="img">',
-                solver_count: 0
-            },
-            {
-                id: 2,
-                name: 'image in description test',
-                score: 300,
-                description: '<img src="https://www.google.com.hk/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="img">',
-                solver_count: 0
+                hints:["hint1", "hint2"]
             }
         ]
     }),
@@ -92,10 +49,16 @@ export default {
         setCategory(){
             this.category = this.$route.params.category;
         },
+        reload() {
+            this.setCategory();
+            this.getChallenges();
+        },
         async getChallenges(){
             const {data: result} = await this.$http.get('/user/challenges/'+this.category)
-            if (result.code == 200){
+            if (result.code == 200 && result.data != null){
                 this.challenges = result.data;
+            }else{
+                this.challenges = [];
             }
         }
     },
