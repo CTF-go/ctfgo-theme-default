@@ -154,7 +154,10 @@
                           Forgot Password
                       </h4>
                   </template>
-                  <div><h2>爬，密码都能忘？💩</h2></div>
+                  <div>
+                    <h2>密码都能忘？💩（联系管理员修改密码）</h2>
+                    <p>QQ1: 912309920; QQ2: 1175078221</p>
+                  </div>
                   <!--
                   <div class="con-form">
                     <vs-input v-model="forgotForm.email" placeholder="Email"></vs-input>
@@ -185,8 +188,8 @@ export default {
       MenuDropdown
     },
     data:() => ({
-      categories: ["12", "1222"],
-      username: '123',
+      categories: [],
+      username: '',
       isStarted: false,
       toggleDropMenu: false,
       admin: false,
@@ -215,7 +218,13 @@ export default {
         pushRouter(adress){
           if (adress != window.location.pathname){
             this.$router.push(adress);
+            if (adress.indexOf("challenges") != -1){
+              this.reloadChallenge();
+            }
           }
+        },
+        reloadChallenge() {
+          this.$emit('reloadChallenge');
         },
         showDropMenu() {
           document.addEventListener('click', this.hideDropMenu)
@@ -229,7 +238,6 @@ export default {
         async logout(){
           this.username = ''
           const {data: result} = await this.$http.get('/logout')
-          console.log(result.code)
           if(result.code == 200){
             this.openNotification('🥳 退出成功')
           }else{
@@ -255,7 +263,6 @@ export default {
             const {data: result} = await this.$http.post('/login', this.loginForm.submit)
 
             if (result.code == 200){
-                console.log(result);
                 this.openNotification('🥳 Success!', 'Hi, '+result.username+'. Welcome to CTFgo~')
                 this.username = result.username
                 this.admin = result.role
@@ -285,6 +292,7 @@ export default {
           const {data: result} = await this.$http.post('/register', this.signupForm.submit)
             if (result.code == 200){
               this.openNotification('🥳 Congratulations～ Registration success!')
+              this.signupForm.active = false;
             }else if (result.code == 1000){
               this.openNotification('用户名重复')
             }else if (result.code == 1001){
@@ -310,7 +318,6 @@ export default {
         },
         async getCategories() {
           const {data: result} = await this.$http.get('/user/categories');
-          console.log(result);
           if (result.code == 200){this.categories = result.data;}
         },
     },
@@ -323,7 +330,6 @@ export default {
       if (this.active == "/dashboard" && !this.admin){
         this.pushRouter('/home')
       }
-      console.log(this.active);
       if ((this.active.indexOf("/challenges") != -1) && !this.username ){
         this.pushRouter('/home')
       }
