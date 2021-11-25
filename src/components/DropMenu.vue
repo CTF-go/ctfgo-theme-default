@@ -4,8 +4,8 @@
     <div class="menu__items">
         <ul v-if="toggleDropMenu">
           <button @click="pushRouter('/profile')">Profile</button>
-          <!--<button @click="pushRouter('/team')">Team</button>-->
-          <button @click="pushRouter('/settings')">Settings</button>
+          <!-- <button @click="pushRouter('/team')"> Team </button> -->
+          <!-- <button @click="pushRouter('/settings')"> Settings </button> -->
           <div role="none" class="dropdown-divider"></div>
           <button>Sign out</button>
         </ul>
