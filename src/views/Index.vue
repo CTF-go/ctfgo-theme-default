@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Navbar/>
-    <router-view/>
+    <Navbar @reloadChallenge="reloadChallenge" />
+    <router-view ref="challengeFuncContainer" />
   </div>
 </template>
 
@@ -10,6 +10,11 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 export default {
     name: 'Index',
-    components: { Navbar, Footer }
+    components: { Navbar, Footer },
+    methods: {
+      reloadChallenge(){
+        this.$refs.challengeFuncContainer.reload();
+      }
+    }
 }
 </script>
