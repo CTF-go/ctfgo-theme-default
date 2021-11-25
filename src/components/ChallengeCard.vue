@@ -14,7 +14,7 @@
 
             <template #header>
                 <h3 class="not-margin"> {{ name }} </h3>   
-                <vs-button v-if="hints!=null && hints.length > 0" @click="active3=!active3" shadow transparent>
+                <vs-button v-if="hints[0].length > 0" @click="active3=!active3" shadow transparent>
                     Hint
                 </vs-button>
                 
@@ -22,7 +22,7 @@
             <div class="con-content">
                 <p class="not-margin" v-html="description"></p>
                 <br>
-                <vs-row>
+                <vs-row v-if="attachment[0].length > 0">
                     <vs-col :key=i :data=j v-for="(i,j) in attachment" vs-type="flex" vs-justify="center" vs-align="center" w="3">
                          <a style="text-decoration:none" :href="i" target="_blank"> 
                          <vs-button style="display:block;margin:0 auto" flat primary> Attachment {{j+1}} </vs-button>
@@ -38,7 +38,7 @@
                     <vs-button @click="getSolves" shadow transparent>
                         Solves: {{ solverCount }}
                     </vs-button>
-                    <vs-button v-if="!isSolved" @click="active=false" transparent>
+                    <vs-button v-if="!isSolved" @click="submitFlag" transparent>
                         Submit
                     </vs-button>
                     <vs-button v-else @click="active=false" disabled transparent>
@@ -88,7 +88,7 @@ export default {
         name: {type: String, default: 'Challenge Name'},
         score: {type: Number, default: 1000},
         description: {type:String, default: 'More information of a challenge...'},
-        isSolved: {type: Number, default: 0},
+        isSolved: {type: Boolean, default: false},
         solverCount: {type: Number, default: 0},
         attachment: [],
         hints: []
@@ -122,11 +122,13 @@ export default {
             return Y + M + D + h + m + s + timeZone;
 	    },
         async submitFlag(){
+            this.active = false;
             const {data: result} = await this.$http.post('/user/submitflag', {"cid": this.id, "flag": this.flag});
             if (result.code == 200){
                 this.openNotification('🥳 Congratulations～ Correct flag!');
+                this.$emit('reloadChallenges')
             }else if(result.code == 400){
-                this.openNotification('😅');
+                this.openNotification('😅 Wrong flag!');
             }
         },
         async getSolves(){
