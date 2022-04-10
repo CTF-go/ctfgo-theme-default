@@ -6,7 +6,7 @@
                 <NoticeCard :notice="notices[(page-1)*5 + i]"/>
             </div>
             <template>
-                <vs-pagination v-model="page" :length="Math.max(Math.ceil(notices.length/5), 1)" />
+                <vs-pagination v-if="notices.length>0" v-model="page" :length="Math.max(Math.ceil(notices.length/5), 1)" />
             </template>
         </div>
     </div>
@@ -19,11 +19,6 @@ export default {
     data:() => ({
         page: 1,
         notices: [
-            {
-                title: "Hi, there",
-                content: "This is a default message.",
-                created_at: "2006-01-02 15:04:05"
-            }
         ]
     }),
     components: { NoticeCard },
@@ -33,7 +28,7 @@ export default {
             var localOffset = -d.getTimezoneOffset()*60; // 获取当前时区与GMT的时间差，单位由分钟转换成秒
             var timeZone = localOffset>0 ? ' UTC+':' UTC'
             timeZone += localOffset/3600;
-            timestamp += localOffset;
+            // timestamp += localOffset;
             var date = new Date(timestamp * 1000);
             var Y = date.getFullYear() + '-';
             var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
@@ -46,9 +41,11 @@ export default {
         async getNotices(){
             const {data: result} = await this.$http.get('/notice/all')
             if(result.code == 200){
+                var converter = new this.showdown.Converter();
                 this.notices = result.data;
                 this.notices.reverse();
                 for (let i=0; i < this.notices.length; i++){
+                    this.notices[i].content = converter.makeHtml(this.notices[i].content);
                     this.notices[i].created_at = this.timestampToTime(this.notices[i].created_at);
                 }
             }

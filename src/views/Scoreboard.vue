@@ -1,20 +1,20 @@
 <template>
 <div class="scoreboard">
     <h1>Scoreboard</h1>
-    <div class="scoreboard-chart">
+    <!--<div class="scoreboard-chart">
         <LineChart :chartData="chartData" :options="options"></LineChart>
-    </div>
+    </div>-->
     <div class="users">
         <vs-table>
             <template #header>
-                <vs-input v-model="search" border placeholder="Search" />
+                <vs-input  v-model="search" border placeholder="Search" />
             </template>
 
             <template #thead>
                 <vs-tr>
-                    <vs-th sort @click="users = $vs.sortData($event, users, 'ranking')">Ranking</vs-th>
-                    <vs-th>Team</vs-th>
-                    <vs-th>Score</vs-th>
+                    <vs-th style="width: 30%;">Ranking</vs-th>
+                    <vs-th style="width: 40%;">Team</vs-th>
+                    <vs-th style="width: 30%;">Score</vs-th>
                 </vs-tr>
             </template>
             <template #tbody>
@@ -44,18 +44,6 @@ export default {
         page: 1,
         max: 10,
         users: [
-            {
-                "ranking": 1,
-                "username": "Bob",
-                "score": 1002,
-                /*"Affiliation": "X1cT34m",*/
-            },
-            {
-                "ranking": 2,
-                "username": "Alice",
-                "score": 1000,
-                /*"Affiliation": "X1cT34m",*/
-            }
         ],
         chartData: {
             labels: ["8:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"],
@@ -82,7 +70,7 @@ export default {
   },
   methods:{
       async getUsersData(){
-          const {data: result} = await this.$http.get('/scores/all');
+          const {data: result} = await this.$http.get('/api/v1/scores/all');
           this.users = result['data'];
           for (var i = 0; i < this.users.length; i++){
               if (i == 0) {this.users[i].ranking = 1;}
@@ -100,7 +88,7 @@ export default {
 <style scoped>
 .users{
     /*background-color: #007779;*/
-    top: 600px;
+    top: 200px;
     width: 800px;
     position: absolute;
     left: 50%;

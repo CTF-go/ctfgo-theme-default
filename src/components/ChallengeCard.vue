@@ -10,7 +10,7 @@
             </div>
         </vs-button>
 
-        <vs-dialog width="500px" scroll v-model="active">
+        <vs-dialog width="550px" scroll v-model="active">
 
             <template #header>
                 <h3 class="not-margin"> {{ name }} </h3>   
@@ -20,7 +20,7 @@
                 
             </template>
             <div class="con-content">
-                <p class="not-margin" v-html="description"></p>
+                <p class="not-margin" style="font-size:1.2rem" v-html="description"></p>
                 <br>
                 <vs-row v-if="attachment[0].length > 0">
                     <vs-col :key=i :data=j v-for="(i,j) in attachment" vs-type="flex" vs-justify="center" vs-align="center" w="3">
@@ -29,7 +29,8 @@
                         </a>
                     </vs-col>
                 </vs-row>
-                <vs-input v-model="flag" placeholder="NCTF{.*}"></vs-input>
+                 
+                <vs-input v-model="flag" placeholder="flag{.*}"></vs-input>
             </div>
 
             <template #footer>
@@ -62,7 +63,7 @@
                                     <vs-tr :key="i" :data="tr" v-for="(tr, i) in solves" >
                                         <vs-td> {{ i+1 }} </vs-td>
                                         <vs-td> {{ tr.username }} </vs-td>
-                                        <vs-td> {{ tr.time }} </vs-td>
+                                        <vs-td> {{ timestampToTime(tr.submitted_at) }} </vs-td>
                                     </vs-tr>
                                 </template>
                             </vs-table>
@@ -111,7 +112,7 @@ export default {
             var localOffset = -d.getTimezoneOffset()*60;
             var timeZone = localOffset>0 ? ' UTC+':' UTC'
             timeZone += localOffset/3600;
-            timestamp += localOffset;
+            // timestamp += localOffset;
             var date = new Date(timestamp * 1000);
             var Y = date.getFullYear() + '-';
             var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
@@ -123,12 +124,14 @@ export default {
 	    },
         async submitFlag(){
             this.active = false;
-            const {data: result} = await this.$http.post('/user/submitflag', {"cid": this.id, "flag": this.flag});
+            const {data: result} = await this.$http.post('/api/user/submitflag', {"cid": this.id, "flag": this.flag});
             if (result.code == 200){
-                this.openNotification('🥳 Congratulations～ Correct flag!');
+                this.openNotification('🥳 Congratulations~ Correct flag!');
                 this.$emit('reloadChallenges')
-            }else if(result.code == 400){
+            }else if(result.code == 4010) {
                 this.openNotification('😅 Wrong flag!');
+            }else if(result.code == 300) {
+                this.openNotification('CTFgo 2022 has ended');
             }
         },
         async getSolves(){
@@ -136,9 +139,6 @@ export default {
             const {data: result} = await this.$http.get('/user/solves/cid/'+this.id);
             if (result.code == 200){
                 this.solves = result.data;
-                for (var i = 0; i < this.solves.length; i++) {
-                    this.solves.time = this.timestampToTime(this.solves.submitted_at);
-                }
             }
         },
         openNotification(title, text) {

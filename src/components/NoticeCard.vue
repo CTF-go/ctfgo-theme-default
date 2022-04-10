@@ -12,9 +12,9 @@
 export default {
     props: {
         notice:{
-            title: {type: String, default: 'Hi, there'},
-            content: {type: String, default: 'This is a default message.'},
-            created_at: {type: String, default: '2006-01-02 15:04:05'}
+            title: '',
+            content: '',
+            created_at: '2006-01-02 15:04:05'
         }
     }
 }

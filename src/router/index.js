@@ -38,10 +38,6 @@ const routes = [
       {
         path: '/team',
         component: () => import('../views/Team.vue')
-      },
-      {
-        path: '/settings',
-        component: () => import('../views/Settings.vue')
       }
     ]
   },

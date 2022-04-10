@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { faCity } from '@fortawesome/free-solid-svg-icons';
 import ChallengeCard from '../components/ChallengeCard'
 
 export default {
@@ -31,18 +32,6 @@ export default {
     data:() => ({
         category: null,
         challenges: [
-            {
-                id: 1,
-                name: 'challenge name',
-                score: 500,
-                description: 'description',
-                is_solved: false,
-                solver_count: 1,
-                attachment: [
-                    "https://baidu.com"
-                ],
-                hints:["hint1", "hint2"]
-            }
         ]
     }),
     methods:{
@@ -57,6 +46,10 @@ export default {
             const {data: result} = await this.$http.get('/user/challenges/'+this.category)
             if (result.code == 200 && result.data != null){
                 this.challenges = result.data;
+                var converter = new this.showdown.Converter();
+                for (let i=0; i < result.data.length; i++){
+                    this.challenges[i].description = converter.makeHtml(this.challenges[i].description);
+                }
             }else{
                 this.challenges = [];
             }

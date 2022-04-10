@@ -53,7 +53,15 @@
                 </template>
             </vs-table>
 
-            <vs-button style="display:block;margin:0 auto" flat @click="checkInfo"> Submit </vs-button>
+            <vs-button style="display:block;margin:0 auto" flat @click="checkInfo"> Submit </vs-button> <br>
+            <vs-switch @click="getSolvedChallenges" v-model="activeChallenges">
+                <template #off>
+                    Show solved challenges
+                </template>
+                <template #on>
+                    Hidden solved challenges
+                </template>
+            </vs-switch>
 
             <vs-dialog auto-width v-model="editActive">
                 <template #header> Change {{ renameStudent[editProp] }} </template>
@@ -75,7 +83,7 @@
                 <vs-button style="display:block;margin:0 auto" @click="submitInfo" transparent> OK </vs-button>
             </vs-dialog>
         </div>
-
+        
         <div class="profile-table" v-if="status!=0"> 
             <vs-table>
                 <template #thead>
@@ -92,11 +100,37 @@
                     </vs-tr>
                 </template>
             </vs-table>
+            <br><br>
+            <vs-switch @click="getSolvedChallenges" v-model="activeChallenges">
+                <template #off>
+                    Show solved challenges
+                </template>
+                <template #on>
+                    Hidden solved challenges
+                </template>
+            </vs-switch>
         </div>
 
-        <div class="solves">
-            <vs-button style="display:block;margin:0 auto" transparent> Show </vs-button>
-        </div>
+        <vs-dialog scroll auto-width overflow-hidden v-model="activeChallenges">
+            <div class="con-content center">
+                <vs-table>
+                    <template #thead>
+                        <vs-tr>
+                            <vs-th> Challenge </vs-th>
+                            <vs-th> Score </vs-th>
+                            <vs-th  width="200px"> Time </vs-th> 
+                        </vs-tr>
+                    </template>
+                    <template #tbody>
+                        <vs-tr :key="i" :data="tr" v-for="(tr, i) in solved_challenges" >
+                            <vs-td> {{ tr.challenge_name }} </vs-td>
+                            <vs-td> {{ tr.score }} </vs-td>
+                            <vs-td> {{ timestampToTime(tr.submitted_at) }} </vs-td>
+                        </vs-tr>
+                    </template>
+                </vs-table>
+            </div>
+        </vs-dialog>
     </div>
 </template>
 
@@ -116,6 +150,7 @@ export default {
     active: false,
     editActive: false,
     editActive2: false,
+    activeChallenges: false,
     edit: null,
     editProp: {},
     renameStudent:{"username":"Name","student_id":"Student ID","qq":"QQ/TEL"},
@@ -133,96 +168,112 @@ export default {
       "others4":{"username": "","email": "","qq": "",}
     },
     selfInfo: [
-        {
-            "username": "cccccs",
-            "id_email": "23s23ss@qq.com",
-            "qq": "4545454544"
-        },
-        {
-            "username": "x2xs",
-            "id_email": "ass22@dd.com",
-            "qq": "2222222"
-        }
+        {"username": "cccccs","id_email": "23s23ss@qq.com","qq": "4545454544"},
+        {"username": "x2xs","id_email": "ass22@dd.com","qq": "2222222"}
+    ],
+    solved_challenges: [
     ]
   }),
-  methods: {
-    copyToken() {
-      console.log("click")
-      const input = document.createElement("input");
-      document.body.appendChild(input);
-      input.setAttribute("value", this.token);
-      input.select();
-      if (document.execCommand("copy")) {
-        document.execCommand("copy");
-      }
-      document.body.removeChild(input);
-    },
-    async getSession() {
-      const {data: result} = await this.$http.get('/user/session');
-          if (result.code == 200){
-            this.username = result.data.username;
-            this.token = result.data.token;
-          }
-    },
-    async getScore() {
-      const {data: result} = await this.$http.get('/user/score/self');
-      if (result.code == 200){
-            this.ranking = result.data.rank;
-            this.score = result.data.score;
-      }
-    },
-    async getStatus() {
-      const {data: result} = await this.$http.get('/user/info/submit/self');
-      if (result.code == 200){
-            this.status = result.status;
-            if (this.status != 0) { this.selfInfo = result.data; }
-      }
-    },
-    openNotification(title, text) {
-      const noti = this.$vs.notification({
-        position: 'top-center', title, text
-      })
-    },
-    checkInfo() {
-      if (this.picked==1){
-        if (this.checkStudent()){this.active=1;}
-      }else{
-        if (this.checkOthers()){this.active=1;}
-      }
-    },
-    submitInfo(){
-      this.active = false;
-      if (this.picked==1){this.submitStudent();}
-      else               {this.submitOthers();}
-    },
+    methods: {
+        timestampToTime(timestamp){
+            var d = new Date();
+            var localOffset = -d.getTimezoneOffset()*60; // 获取当前时区与GMT的时间差，单位由分钟转换成秒
+            var timeZone = localOffset>0 ? ' UTC+':' UTC'
+            timeZone += localOffset/3600;
+            // timestamp += localOffset;
+            var date = new Date(timestamp * 1000);
+            var Y = date.getFullYear() + '-';
+            var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+            var D = date.getDate() + ' ';
+            var h = date.getHours() + ':';
+            var m = date.getMinutes() + ':';
+            var s = date.getSeconds();
+            return Y + M + D + h + m + s + timeZone;
+	    },
+        copyToken() {
+            console.log("click")
+            const input = document.createElement("input");
+            document.body.appendChild(input);
+            input.setAttribute("value", this.token);
+            input.select();
+            if (document.execCommand("copy")) {
+                document.execCommand("copy");
+            }
+            document.body.removeChild(input);
+        },
+        async getSolvedChallenges(){
+            if (this.activeChallenges) { return; }
+            const {data: result} = await this.$http.get('/user/solves/self');
+            if (result.code == 200){
+                this.solved_challenges = result.data;
+            }
+        },
+        async getSession() {
+            const {data: result} = await this.$http.get('/user/session');
+            if (result.code == 200){
+                this.username = result.data.username;
+                this.token = result.data.token;
+            }
+        },
+        async getScore() {
+            const {data: result} = await this.$http.get('/user/score/self');
+            if (result.code == 200){
+                this.ranking = result.data.rank;
+                this.score = result.data.score;
+            }
+        },
+        async getStatus() {
+            const {data: result} = await this.$http.get('/user/info/submit/self');
+            if (result.code == 200){
+                this.status = result.status;
+                if (this.status != 0) { this.selfInfo = result.data; }
+            }
+        },
+        openNotification(title, text) {
+            const noti = this.$vs.notification({
+                position: 'top-center', title, text
+            })
+        },
+        checkInfo() {
+            if (this.picked==1){
+                if (this.checkStudent()){this.active=1;}
+            }else{
+                if (this.checkOthers()){this.active=1;}
+            }
+        },
+        submitInfo(){
+            this.active = false;
+            if (this.picked==1){this.submitStudent();}
+            else               {this.submitOthers();}
+        },
 
-    checkStudent() {
-      var studentArray = [[this.studentInfo['student1'].username.length, this.studentInfo['student1'].student_id.length, this.studentInfo['student1'].qq.length],
-                          [this.studentInfo['student2'].username.length, this.studentInfo['student2'].student_id.length, this.studentInfo['student2'].qq.length],
-                          [this.studentInfo['student3'].username.length, this.studentInfo['student3'].student_id.length, this.studentInfo['student3'].qq.length],
-                          [this.studentInfo['student4'].username.length, this.studentInfo['student4'].student_id.length, this.studentInfo['student4'].qq.length]];
-      var beforeLine = 0;
-      for (var i = 0; i < studentArray.length; i++) {
-        if (Math.min(...studentArray[i]) > 0){ // 一行所有空都填满
-          if (i == 0 || beforeLine == 1){
-            beforeLine = 1;
-          } else {
-            this.openNotification("Don't leave a blank line in the middle");
-            return false;
-          }
-        } else if (Math.max(...studentArray[i]) == 0){ // 一行所有空都没填
-          if (i == 0) {
-            this.openNotification("Please fill in the table");
-            return false;
-          }
-          beforeLine = 0;
-        } else {
-          this.openNotification("Student"+(i+1)+": Information is incomplete");
-          return false;
-        }
-      }
-      return true;
-    },
+        checkStudent() {
+            var studentArray = [[this.studentInfo['student1'].username.length, this.studentInfo['student1'].student_id.length, this.studentInfo['student1'].qq.length],
+                                [this.studentInfo['student2'].username.length, this.studentInfo['student2'].student_id.length, this.studentInfo['student2'].qq.length],
+                                [this.studentInfo['student3'].username.length, this.studentInfo['student3'].student_id.length, this.studentInfo['student3'].qq.length],
+                                [this.studentInfo['student4'].username.length, this.studentInfo['student4'].student_id.length, this.studentInfo['student4'].qq.length]];
+            var beforeLine = 0;
+            for (var i = 0; i < studentArray.length; i++) {
+                if (Math.min(...studentArray[i]) > 0){ // 一行所有空都填满
+                if (i == 0 || beforeLine == 1){
+                    beforeLine = 1;
+                } else {
+                    this.openNotification("Don't leave a blank line in the middle");
+                    return false;
+                }
+                } else if (Math.max(...studentArray[i]) == 0){ // 一行所有空都没填
+                if (i == 0) {
+                    this.openNotification("Please fill in the table");
+                    return false;
+                }
+                beforeLine = 0;
+                } else {
+                this.openNotification("Student"+(i+1)+": Information is incomplete");
+                return false;
+                }
+            }
+            return true;
+        },
     checkOthers() {
       var othersArray = [[this.othersInfo['others1'].username.length, this.othersInfo['others1'].email.length, this.othersInfo['others1'].qq.length],
                          [this.othersInfo['others2'].username.length, this.othersInfo['others2'].email.length, this.othersInfo['others2'].qq.length],
@@ -254,6 +305,7 @@ export default {
       const {data: result} = await this.$http.post('/user/submit/studentinfo', this.studentInfo);
       if (result.code == 200){
         this.openNotification("Information updated successfully");
+        this.getStatus();
       }else if (result.code == 2000){
         this.openNotification("Student1: Information is incomplete");
       }else if (result.code == 2001){
@@ -273,6 +325,7 @@ export default {
       const {data: result} = await this.$http.post('/user/submit/othersinfo', this.othersInfo);
       if (result.code == 200){
         this.openNotification("Information updated successfully");
+        this.getStatus();
       }else if (result.code == 2000){
         this.openNotification("Member1: Information is incomplete");
       }else if (result.code == 2001){

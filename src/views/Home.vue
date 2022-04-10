@@ -7,7 +7,7 @@
     <div class="logo">
       <h1> 
         <vue-typer text='Welcome to' :erase-on-complete='true' type-delay='100' :repeat='0' pre-erase-delay='1000' erase-delay='100'></vue-typer>
-        <vue-typer text='NCTF 2021' :repeat='0' pre-type-delay='2500' type-delay='180'></vue-typer>
+        <vue-typer text='CTFgo' :repeat='0' pre-type-delay='2500' type-delay='180'></vue-typer>
       </h1>
       <!-- <img src="../assets/ctfgo-logo-long.png" alt="Logo of CTFgo" /> -->
     </div>

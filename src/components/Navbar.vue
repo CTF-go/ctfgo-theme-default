@@ -25,6 +25,10 @@
           </template>
         </vs-navbar-group>
 
+        <vs-navbar-item  v-else @click="pushRouter('/challenges/please%20login')" :active="active == '/challenges'" id="/challenges">
+          Challenges
+        </vs-navbar-item>
+
         <vs-navbar-item v-if="admin" @click="pushRouter('/dashboard')" :active="active == '/dashboard'" id="/dashboard">
           Dashboard
         </vs-navbar-item>
@@ -42,7 +46,7 @@
                 <ul v-if="toggleDropMenu">
                   <button @click="pushRouter('/profile')">Profile</button>
                   <!--<button @click="pushRouter('/team')">Team</button>-->
-                  <button @click="pushRouter('/settings')">Settings</button>
+                  <!--<button @click="pushRouter('/settings')">Settings</button>-->
                   <div role="none" class="dropdown-divider"></div>
                   <button @click="logout()">Log out</button>
                 </ul>
@@ -61,7 +65,7 @@
                     </h4>
                 </template>
                 <div class="con-form">
-                <vs-input v-model="loginForm.submit.username" placeholder="Username or email address"></vs-input>
+                <vs-input v-model="loginForm.submit.username" placeholder="Team name or email address"></vs-input>
                 <vs-input v-model="loginForm.submit.password" placeholder="Password" type="password" ></vs-input>
                   <div class="flex">
                       <vs-checkbox v-model="loginForm.submit.remember">Remember me</vs-checkbox>
@@ -89,7 +93,7 @@
                 <vs-dialog blur v-model="signupForm.active">
                   <template #header>
                       <h4 class="not-margin">
-                          Create Account
+                          Create Team
                       </h4>
                   </template>
                   <div class="con-form">
@@ -101,12 +105,12 @@
                             Email Invalid
                         </template>
                     </vs-input>
-                    <vs-input v-model="signupForm.submit.username" placeholder="Username">
+                    <vs-input v-model="signupForm.submit.username" placeholder="Team name">
                         <template v-if="this.signupForm.submit.username.length<=10 && signupForm.submit.username !== ''" #message-success>
-                            Username Valid
+                            Team name Valid
                         </template>
                         <template v-if="this.signupForm.submit.username.length>10 && signupForm.submit.username !== ''" #message-danger>
-                            Username is too long
+                            Team name is too long
                         </template>
                     </vs-input>
                     <vs-input v-model="signupForm.submit.password" type="password" placeholder="Password">
@@ -188,8 +192,8 @@ export default {
       MenuDropdown
     },
     data:() => ({
-      categories: [],
-      username: '',
+      categories: ["test"],
+      username: '1',
       isStarted: false,
       toggleDropMenu: false,
       admin: false,
@@ -237,7 +241,7 @@ export default {
         },
         async logout(){
           this.username = ''
-          const {data: result} = await this.$http.get('/logout')
+          const {data: result} = await this.$http.get('/user/logout')
           if(result.code == 200){
             this.openNotification('🥳 退出成功')
           }else{
@@ -251,8 +255,8 @@ export default {
         async getCaptchaID(){
           const {data: result} = await this.$http.get('/captcha')
           if (result.code == 200){
-            this.signupForm.image = 'data:image/png;base64,'+result.data
-            this.signupForm.submit.captchaid = result.id
+            this.signupForm.image = 'data:image/png;base64,'+result.data.b64;
+            this.signupForm.submit.captchaid = result.data.id;
           }
         },
         async signin(){
@@ -263,10 +267,10 @@ export default {
             const {data: result} = await this.$http.post('/login', this.loginForm.submit)
 
             if (result.code == 200){
-                this.openNotification('🥳 Success!', 'Hi, '+result.username+'. Welcome to CTFgo~')
-                this.username = result.username
-                this.admin = result.role
-                this.loginForm.active = false
+                this.openNotification('🥳 Success!', 'Hi, '+result.data.username+'. Welcome to CTFgo~')
+                this.username = result.data.username;
+                this.admin = result.data.role;
+                this.loginForm.active = false;
                 this.getCategories();
             }else{
               this.openNotification('😵 Login failed!', 'Plese check your <strong>username</strong> or <strong>password</strong>.')
@@ -291,16 +295,20 @@ export default {
           }
           const {data: result} = await this.$http.post('/register', this.signupForm.submit)
             if (result.code == 200){
-              this.openNotification('🥳 Congratulations～ Registration success!')
+              this.openNotification('🥳 Congratulations~ Registration success!')
               this.signupForm.active = false;
-            }else if (result.code == 1000){
+            }else if (result.code == 4002){
               this.openNotification('用户名重复')
-            }else if (result.code == 1001){
+              this.getCaptchaID()
+            }else if (result.code == 4003){
               this.openNotification('邮箱重复')
-            }else if (result.code == 1002){
+              this.getCaptchaID()
+            }else if (result.code == 4001){
               this.openNotification('验证码错误')
+              this.getCaptchaID()
             } else{
               this.openNotification('注册失败')
+              this.getCaptchaID()
             };
         },
         openNotification(title, text) {
@@ -330,7 +338,7 @@ export default {
       if (this.active == "/dashboard" && !this.admin){
         this.pushRouter('/home')
       }
-      if ((this.active.indexOf("/challenges") != -1) && !this.username ){
+      if ((this.active == "/profile") && (!this.username) ){
         this.pushRouter('/home')
       }
       this.isSignedIn();
